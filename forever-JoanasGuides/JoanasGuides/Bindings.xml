@@ -1,0 +1,10 @@
+<Bindings>
+
+    <Binding name="CLICK JoanasGuides_ActionButton1:LeftButton" category="Joana's Guides" />
+    <Binding name="CLICK JoanasGuides_ActionButton2:LeftButton" category="Joana's Guides" />
+    <Binding name="CLICK JoanasGuides_ActionButton3:LeftButton" category="Joana's Guides" />
+    <Binding name="CLICK JoanasGuides_ActionButton4:LeftButton" category="Joana's Guides" />
+    <Binding name="CLICK JoanasGuides_ActionButton5:LeftButton" category="Joana's Guides" />
+    <Binding name="CLICK JoanasGuides_ActionButton6:LeftButton" category="Joana's Guides" />
+
+</Bindings>
