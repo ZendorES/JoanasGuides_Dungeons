@@ -1,0 +1,100 @@
+# 1. NOMBRE DEL PROCESO
+name: Publicar Addon Release
+
+# 2. DISPARADOR (¿Cuándo se ejecuta esto?)
+on:
+  release:
+    types: [published]
+
+# 3. LAS TAREAS (Jobs)
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+    
+    steps:
+      # Descarga el código de tu repositorio en el servidor de GitHub
+      - name: Descargar código
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      # =========================================================================
+      # 4. COMPRIMIR LA VERSIÓN WOW ERA (CLASSIC)
+      # =========================================================================
+      # Solo se ejecuta si el tag NO contiene la palabra 'forever' ni 'Forever'
+      - name: Paquetizar versión Classic
+        if: ${{ !contains(github.event.release.tag_name, 'forever') && !contains(github.event.release.tag_name, 'Forever') }}
+        id: pack_classic
+        run: |
+          cd classic-JoanasGuides 
+          zip -r ../temp-classic.zip .
+          cd ..
+          
+          TAG="${{ github.event.release.tag_name }}"
+          
+          if [[ "$TAG" == *-Classic ]]; then
+            TAG_LIMPIO="${TAG%-Classic}"
+          elif [[ "$TAG" == *-classic ]]; then
+            TAG_LIMPIO="${TAG%-classic}"
+          else
+            TAG_LIMPIO="$TAG"
+          fi
+          
+          mv temp-classic.zip "classic-JoanasGuides-${TAG_LIMPIO}.zip"
+          
+          echo "zip_name=classic-JoanasGuides-${TAG_LIMPIO}.zip" >> $GITHUB_OUTPUT
+
+      # =========================================================================
+      # 5. COMPRIMIR LA VERSIÓN FOREVER
+      # =========================================================================
+      # Solo se ejecuta si el tag NO contiene la palabra 'classic' ni 'Classic'
+      - name: Paquetizar versión Forever
+        if: ${{ !contains(github.event.release.tag_name, 'classic') && !contains(github.event.release.tag_name, 'Classic') }}
+        id: pack_forever
+        run: |
+          cd forever-JoanasGuides
+          zip -r ../temp-forever.zip .
+          cd ..
+          
+          TAG="${{ github.event.release.tag_name }}"
+          
+          if [[ "$TAG" == *-Forever ]]; then
+            TAG_LIMPIO="${TAG%-Forever}"
+          elif [[ "$TAG" == *-forever ]]; then
+            TAG_LIMPIO="${TAG%-forever}"
+          else
+            TAG_LIMPIO="$TAG"
+          fi
+          
+          mv temp-forever.zip "forever-JoanasGuides-${TAG_LIMPIO}.zip"
+          
+          echo "zip_name=forever-JoanasGuides-${TAG_LIMPIO}.zip" >> $GITHUB_OUTPUT
+
+      # =========================================================================
+      # 6. SUBIR VERSIÓN ERA (Si corresponde)
+      # =========================================================================
+      # Subirá el archivo usando el nombre exacto que calculamos en el paso 4
+      - name: Subir Asset Classic
+        if: ${{ !contains(github.event.release.tag_name, 'forever') && !contains(github.event.release.tag_name, 'Forever') }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: ${{ steps.pack_classic.outputs.zip_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # =========================================================================
+      # 7. SUBIR VERSIÓN FOREVER (Si corresponde)
+      # =========================================================================
+      # Subirá el archivo usando el nombre exacto que calculamos en el paso 5
+      - name: Subir Asset Forever
+        if: ${{ !contains(github.event.release.tag_name, 'classic') && !contains(github.event.release.tag_name, 'Classic') }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: ${{ steps.pack_forever.outputs.zip_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
