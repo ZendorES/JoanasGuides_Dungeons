@@ -3,7 +3,7 @@ select(2, ...).SetupGlobalFacade()
 
 local TaskType = Mixin({
 	type = "withdraw",
-	taskLabel = L["Withdraw from the bank:"],
+	taskLabel = L["Saca del banco:"],
 	incompleteIcon = IconService.GetIconInfo("vignettelootelite"),
 }, BankTaskMixin)
 

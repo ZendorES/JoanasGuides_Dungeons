@@ -44,7 +44,7 @@ function TaskType:RenderFunc(task, container)
 		task.iconOverride = nil
 	end
 	container.text:SetShown(true)
-	container.text:SetText(L["Turn in: |C%s%s|r"]:format(color, link))
+	container.text:SetText(L["Entrega: |C%s%s|r"]:format(color, link))
 end
 
 RegisterTaskType(TaskType)

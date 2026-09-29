@@ -19,16 +19,16 @@ function GetNPCReaction(npcID)
 end
 
 NPCRaces = {
-    [1] = "Human",
-    [2] = "Orc",
-    [3] = "Dwarf",
-    [4] = "Night Elf",
-    [5] = "Undead",
+    [1] = "Humano",
+    [2] = "Orco",
+    [3] = "Enano",
+    [4] = "Elfo de la Noche",
+    [5] = "No-Muerto",
     [6] = "Tauren",
-    [7] = "Gnome",
+    [7] = "Gnomo",
     [8] = "Troll",
     [9] = "Goblin",
-    [10] = "Blood Elf",
+    [10] = "Elfo de Sangre",
     [11] = "Draenei",
     [12] = "Fel Orc",
     [13] = "Naga",
@@ -59,19 +59,19 @@ NPCRaces = {
 }
 
 NPCGenders = {
-    [0] = "male",
-    [1] = "female"
+    [0] = "hombre",
+    [1] = "mujer"
 }
 
 NPCTypes = {
-    [0] = "Humanoid",
-    [1] = "Undead",
+    [0] = "Humanoide",
+    [1] = "No-Muerto",
     [2] = "Elemental",
-    [3] = "Beast",
-    [4] = "Dragonkin",
-    [5] = "Giant",
-    [6] = "Demon",
-    [7] = "Mechanical",
+    [3] = "Bestia",
+    [4] = "Dragonante",
+    [5] = "Gigante",
+    [6] = "Demonio",
+    [7] = "Mecánico",
     [8] = "Critter",
 }
 
