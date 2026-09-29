@@ -1,6 +1,6 @@
 select(2, ...).SetupGlobalFacade()
 
-local AddonVersion = "3.02.62"
+local AddonVersion = "3.02.63"
 local isBeta = true
 local GuideVersion = "3.02.59"
 local GuideVersionMinimum = "3.02.59"

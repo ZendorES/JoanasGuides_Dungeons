@@ -19,6 +19,7 @@ Professions = {
 }
 
 ProfessionsSkillLinesLUT = {
+	[333] = "ENCHANTING",
 	[185] = "COOKING",
 	[171] = "ALCHEMY",
 	[164] = "BLACKSMITHING",
