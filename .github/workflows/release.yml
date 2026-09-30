@@ -98,3 +98,12 @@ jobs:
           files: ${{ steps.pack_forever.outputs.zip_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # =========================================================================
+      # 8. NOTIFICACIÓN A DISCORD (Añadido)
+      # =========================================================================
+      # Envía un aviso estético al canal configurado mediante la URL del Webhook
+      - name: Notificar Nueva Release en Discord
+        uses: SethCohen/github-releases-to-discord@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
