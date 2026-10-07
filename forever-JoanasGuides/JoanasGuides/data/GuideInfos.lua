@@ -4728,7 +4728,7 @@ GuideInfos = {
 		description = "57-60 La Masacre - Oeste",
 		zone = 2557,
 		group = "Mazmorras",
-		condition = "HORDE AND ALLIANCE",
+		condition = "",
 		flags = "BS",
 		moduleID = "Era",
 		recommended = "LEVEL >= 57 and LEVEL <= 60",
