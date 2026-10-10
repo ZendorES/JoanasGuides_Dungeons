@@ -25,8 +25,10 @@ function Hyperlinks.GetExternalSiteURL(type, var)
     if (not externalSiteBaseURLPattern) then
         local gameVersion = GetWowVersion()
         local gameSlug
-        if (gameVersion < 20000) then
+        if (gameVersion < 16000) then
             gameSlug = "classic"
+        elseif (gameVersion >= 16000 and gameVersion < 20000) then
+            gameSlug = "forever"
         elseif (gameVersion >= 20000 and gameVersion < 30000) then
             gameSlug = "tbc"
         elseif (gameVersion >= 30000 and gameVersion < 40000) then
