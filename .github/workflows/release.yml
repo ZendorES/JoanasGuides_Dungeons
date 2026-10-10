@@ -22,88 +22,40 @@ jobs:
           ref: ${{ github.event.release.tag_name }}
 
       # =========================================================================
-      # 4. COMPRIMIR LA VERSIÓN WOW ERA (CLASSIC)
+      # 4. COMPRIMIR AMBAS CARPETAS EN UN ÚNICO ZIP
       # =========================================================================
-      # Solo se ejecuta si el tag NO contiene la palabra 'forever' ni 'Forever'
-      - name: Paquetizar versión Classic
-        if: ${{ !contains(github.event.release.tag_name, 'forever') && !contains(github.event.release.tag_name, 'Forever') }}
-        id: pack_classic
+      # Tarjeta de empaquetado unificado
+      - name: Paquetizar Addons en un único archivo
+        id: pack_addons
         run: |
-          cd classic-JoanasGuides 
-          zip -r ../temp-classic.zip .
-          cd ..
-          
           TAG="${{ github.event.release.tag_name }}"
-          
-          if [[ "$TAG" == *-Classic ]]; then
-            TAG_LIMPIO="${TAG%-Classic}"
-          elif [[ "$TAG" == *-classic ]]; then
-            TAG_LIMPIO="${TAG%-classic}"
-          else
-            TAG_LIMPIO="$TAG"
-          fi
-          
-          mv temp-classic.zip "classic-JoanasGuides-${TAG_LIMPIO}.zip"
-          
-          echo "zip_name=classic-JoanasGuides-${TAG_LIMPIO}.zip" >> $GITHUB_OUTPUT
+          NOMBRE_ZIP="JoanasGuides-${TAG}.zip"
+          zip -r "$NOMBRE_ZIP" JoanasGuides JoanasGuides-Era
+          echo "zip_name=$NOMBRE_ZIP" >> $GITHUB_OUTPUT
 
       # =========================================================================
-      # 5. COMPRIMIR LA VERSIÓN FOREVER
+      # 5. SUBIR EL ASSET ÚNICO A LA RELEASE DE GITHUB
       # =========================================================================
-      # Solo se ejecuta si el tag NO contiene la palabra 'classic' ni 'Classic'
-      - name: Paquetizar versión Forever
-        if: ${{ !contains(github.event.release.tag_name, 'classic') && !contains(github.event.release.tag_name, 'Classic') }}
-        id: pack_forever
-        run: |
-          cd forever-JoanasGuides
-          zip -r ../temp-forever.zip .
-          cd ..
-          
-          TAG="${{ github.event.release.tag_name }}"
-          
-          if [[ "$TAG" == *-Forever ]]; then
-            TAG_LIMPIO="${TAG%-Forever}"
-          elif [[ "$TAG" == *-forever ]]; then
-            TAG_LIMPIO="${TAG%-forever}"
-          else
-            TAG_LIMPIO="$TAG"
-          fi
-          
-          mv temp-forever.zip "forever-JoanasGuides-${TAG_LIMPIO}.zip"
-          
-          echo "zip_name=forever-JoanasGuides-${TAG_LIMPIO}.zip" >> $GITHUB_OUTPUT
-
-      # =========================================================================
-      # 6. SUBIR VERSIÓN ERA (Si corresponde)
-      # =========================================================================
-      # Subirá el archivo usando el nombre exacto que calculamos en el paso 4
-      - name: Subir Asset Classic
-        if: ${{ !contains(github.event.release.tag_name, 'forever') && !contains(github.event.release.tag_name, 'Forever') }}
+      - name: Subir Asset a la Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.release.tag_name }}
-          files: ${{ steps.pack_classic.outputs.zip_name }}
+          files: ${{ steps.pack_addons.outputs.zip_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # =========================================================================
-      # 7. SUBIR VERSIÓN FOREVER (Si corresponde)
+      # 6. NOTIFICACIÓN A DISCORD (Zendor)
       # =========================================================================
-      # Subirá el archivo usando el nombre exacto que calculamos en el paso 5
-      - name: Subir Asset Forever
-        if: ${{ !contains(github.event.release.tag_name, 'classic') && !contains(github.event.release.tag_name, 'Classic') }}
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.event.release.tag_name }}
-          files: ${{ steps.pack_forever.outputs.zip_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # =========================================================================
-      # 8. NOTIFICACIÓN A DISCORD (Añadido)
-      # =========================================================================
-      # Envía un aviso estético al canal configurado mediante la URL del Webhook
-      - name: Notificar Nueva Release en Discord
+      - name: Notificar Nueva Release en Discord (Zendor)
         uses: SethCohen/github-releases-to-discord@v1
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+
+      # =========================================================================
+      # 7. NOTIFICACIÓN A DISCORD (Damned)
+      # =========================================================================
+      - name: Notificar Nueva Release en Discord (Damned)
+        uses: SethCohen/github-releases-to-discord@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_DAMNED_WEBHOOK }}
