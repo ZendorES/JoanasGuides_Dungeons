@@ -98,3 +98,12 @@ end
 GetItemCount = GetItemCount or C_Item.GetItemCount
 GetItemInfo = GetItemInfo or C_Item.GetItemInfo
 GetItemInfoInstant = GetItemInfoInstant or C_Item.GetItemInfoInstant
+GetFactionInfoByID = GetFactionInfoByID or function(repID)
+	local result = C_Reputation and C_Reputation.GetFactionDataByID and C_Reputation.GetFactionDataByID(repID)
+	if (result) then
+		return result.name, result.description, result.reaction
+	else
+		return nil, nil, 0
+	end
+end
+canaccessvalue = canaccessvalue or function() return true end

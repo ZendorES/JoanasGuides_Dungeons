@@ -1,9 +1,9 @@
 select(2, ...).SetupGlobalFacade()
 
-local AddonVersion = "3.02.63"
-local isBeta = true
-local GuideVersion = "3.02.59"
-local GuideVersionMinimum = "3.02.59"
+local AddonVersion = "3.03.01"
+local isBeta = false
+local GuideVersion = "3.03.01"
+local GuideVersionMinimum = "3.03.01"
 
 GuideModules = { }
 
@@ -70,8 +70,8 @@ function GuideModules.Reload()
 	modules = { }
 	local warnings = { }
 	local incompatible
-	-- October 15 2026 12:00 AM EDT
-	local expiration = 1792036800
+	-- December 15 2026 12:00 AM EDT
+	local expiration = 1797310800
 	local expired = time() > expiration
 	local expiringSoon = time() > expiration - (60 * 60 * 24 * 7)
 
@@ -127,13 +127,6 @@ function GuideModules.Reload()
 			table.insert(warnings, 1, " ")
 			table.insert(warnings, 1, "Oops! It looks like you've updated the addon but haven't updated some of your guides content yet. Get back into action by grabbing the latest updates from our website. Install them, then type /reload to keep enjoying Joana's Guides!")
 		end
-		CompatibilityWarnings.SetWarnings(warnings)
-	elseif (GuideModules.IsBeta()) then
-		-- remove after Forever Beta ends
-		warnings = { }
-		table.insert(warnings, 1, "Note: As of Sep. 20 2026 due to a game client issue, your guide progress might not reliably save. To find your place after logging back in, hold shift while clicking the guide step left or right arrow to quickly skip over completed steps to find where you left off or if you remember the step ID, you can use /joana goto ##-## ")
-		table.insert(warnings, 1, " ")
-		table.insert(warnings, 1, "Joana's Guides for WoW Forever is currently in beta. Please report bugs via the support form at joanasworld.com.")
 		CompatibilityWarnings.SetWarnings(warnings)
 	else
 		CompatibilityWarnings.SetWarnings(nil)
