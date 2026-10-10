@@ -27,19 +27,27 @@ function ProfessionService.GetPoints(profKey)
 	if (skillNameLUT) then
 		local skillName = skillNameLUT[profKey]
 		if (skillName) then
-			return skillPoints[skillName] or 0
+			return skillPoints[skillName] or skillPoints[profKey] or 0
 		end
 	end
 	return 0
 end
 
 function RefreshSkillPoints()
-	if (wowversion < 100000) then
+	if (wowversion < 16000 or (wowversion >= 20000 and wowversion < 120000)) then
 		local numSkills = GetNumSkillLines();
 		skillPoints = { }
 		for i = 1, numSkills do
 			local skillName, _, _, skillRank = GetSkillLineInfo(i);
 			skillPoints[skillName] = skillRank
+		end
+	else
+		local professions = { GetProfessions() }
+		for i = 1, 5 do
+			if (professions[i]) then
+				local _, _, skillLevel, _, _, _, skillLine = GetProfessionInfo(professions[i])
+				skillPoints[ProfessionsSkillLinesLUT[skillLine]] = skillLevel
+			end
 		end
 	end
 end
@@ -47,13 +55,11 @@ end
 local function OnEvent()
 	if (not skillNameLUT) then
 		skillNameLUT = { }
-		if (wowversion < 100000) then
-			for profKey, tiers in pairs(Professions) do
-				local name = GetSpellInfo(tiers[1])
-				if (name) then
-					skillNameLUT[name] = profKey
-					skillNameLUT[profKey] = name
-				end
+		for profKey, tiers in pairs(Professions) do
+			local name = GetSpellInfo(tiers[1])
+			if (name) then
+				skillNameLUT[name] = profKey
+				skillNameLUT[profKey] = name
 			end
 		end
 	end

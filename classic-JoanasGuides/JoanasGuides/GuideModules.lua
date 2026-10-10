@@ -1,8 +1,9 @@
 select(2, ...).SetupGlobalFacade()
 
-local AddonVersion = "3.02.61"
-local GuideVersion = "3.02.59"
-local GuideVersionMinimum = "3.02.59"
+local AddonVersion = "3.03.01"
+local isBeta = false
+local GuideVersion = "3.03.01"
+local GuideVersionMinimum = "3.03.01"
 
 GuideModules = { }
 
@@ -62,15 +63,15 @@ function GuideModules.GetModule(moduleID)
 end
 
 function GuideModules.IsBeta()
-	return false
+	return isBeta
 end
 
 function GuideModules.Reload()
 	modules = { }
 	local warnings = { }
 	local incompatible
-	-- October 15 2026 12:00 AM EDT
-	local expiration = 1792036800
+	-- December 15 2026 12:00 AM EDT
+	local expiration = 1797310800
 	local expired = time() > expiration
 	local expiringSoon = time() > expiration - (60 * 60 * 24 * 7)
 

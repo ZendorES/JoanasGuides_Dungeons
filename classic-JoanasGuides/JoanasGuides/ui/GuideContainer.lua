@@ -25,6 +25,7 @@ function component.Init()
 	end
 	frame:SetClampedToScreen(true)
 	frame:SetScript("OnDragStart", function(self)
+		if (InRetailCombatLockdown()) then return end
 		if not self.isLocked then
 			self:StartMoving()
 			isMoving = true

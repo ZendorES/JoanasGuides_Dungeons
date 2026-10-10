@@ -17,3 +17,18 @@ Professions = {
 	FIRSTAID = { 3273, 3274, 7924, 10846, 27028, 45542 },
 	FISHING = { 7620, 7731, 7732, 18248, 33095, 51294 },
 }
+
+ProfessionsSkillLinesLUT = {
+	[333] = "ENCHANTING",
+	[185] = "COOKING",
+	[171] = "ALCHEMY",
+	[164] = "BLACKSMITHING",
+	[202] = "ENGINEERING",
+	[165] = "LEATHERWORKING",
+	[356] = "FISHING",
+	[197] = "TAILORING",
+	[129] = "FIRSTAID",
+	[182] = "HERBALISM",
+	[393] = "SKINNING",
+	[186] = "MINING"
+}

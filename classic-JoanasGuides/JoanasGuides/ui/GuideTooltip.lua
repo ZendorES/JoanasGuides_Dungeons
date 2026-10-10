@@ -13,7 +13,7 @@ function component.Init(components)
     GameTooltip_OnLoad(GuideTooltip);
     GuideTooltip.shoppingTooltips = { ShoppingTooltip1, ShoppingTooltip2 };
     GameTooltip_OnLoad(GuideTooltip)
-    if (wowversion < 100000) then
+    if (wowversion < 16000 or (wowversion >= 20000 and wowversion < 120000)) then
         GuideTooltip:SetScript("OnTooltipSetUnit", GameTooltip_OnTooltipSetUnit)
         GuideTooltip:SetScript("OnTooltipSetItem", function(self, ...)
             GameTooltip_OnTooltipSetItem(self, ...)

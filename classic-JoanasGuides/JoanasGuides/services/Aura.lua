@@ -1,12 +1,10 @@
 --[[ See license.txt for license and copyright information ]]
 select(2, ...).SetupGlobalFacade()
 
-local wowversion = select(7,GetBuildInfo())
-if (not wowversion) then wowversion = select(4, GetBuildInfo()) end
-
 local eventFrame = CreateFrame("Frame")
 local buffs = { }
 local debuffs = { }
+local deferred = false
 
 AuraService = { }
 
@@ -19,7 +17,12 @@ function AuraService.PlayerHasDebuff(spellID)
 end
 
 local function OnEvent(_, event, unitTarget)
-	if (event == "PLAYER_ENTERING_WORLD" or unitTarget == "player") then
+	if (event == "PLAYER_ENTERING_WORLD" or (event == "PLAYER_REGEN_ENABLED" and deferred) or unitTarget == "player") then
+		if (C_Secrets.ShouldAurasBeSecret()) then
+			deferred = true
+			return
+		end
+		deferred = false
 		buffs = { }
 		local index = 1
 		while true do
@@ -48,4 +51,5 @@ end
 
 eventFrame:SetScript("OnEvent", OnEvent)
 eventFrame:RegisterEvent("UNIT_AURA")
+eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
 eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")

@@ -1,6 +1,10 @@
 --[[ See license.txt for license and copyright information ]]
 select(2, ...).SetupGlobalFacade()
 
+if (IsRetailAPI()) then
+    return
+end
+
 local lastStep
 
 local component = UI.CreateComponent("TargetMarker")

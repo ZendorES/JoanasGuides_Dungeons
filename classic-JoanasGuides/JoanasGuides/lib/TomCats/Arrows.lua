@@ -8,6 +8,9 @@ For more information, contact via email at tomcat@tomcatstours.com
 ]]
 select(2, ...).SetupGlobalFacade()
 
+-- Proof of concept: large on-screen directional arrow
+local ENABLE_SCREEN_ARROW = false
+
 local minimap_size = {
     indoor = {
         [0] = 300, -- scale
@@ -42,6 +45,108 @@ local Mixin = Mixin
 local arrows = { }
 local active = false
 
+-- Screen arrow state
+local screenArrow
+local screenArrowActive = false
+
+local SCREEN_ARROW_PROXIMITY = 1  -- yards
+
+local function CreateScreenArrow()
+    local f = CreateFrame("Frame", "JoanasScreenArrow", UIParent)
+    f:SetSize(160, 160)
+    f:SetPoint("CENTER", UIParent, "CENTER", 0, 150)
+    f:SetFrameStrata("HIGH")
+    f:SetFrameLevel(10)
+    f:SetMovable(true)
+    f:EnableMouse(true)
+    f:RegisterForDrag("LeftButton")
+    f:SetScript("OnDragStart", f.StartMoving)
+    f:SetScript("OnDragStop", f.StopMovingOrSizing)
+    f:SetClampedToScreen(true)
+
+    -- Arrow texture
+    local arrow = f:CreateTexture(nil, "OVERLAY")
+    arrow:SetTexture(I["Arrow-Mask"])
+    arrow:SetSize(160, 160)
+    arrow:SetAllPoints(f)
+    arrow:SetVertexColor(0, 0.8, 0, 1)
+    f.arrowTexture = arrow
+
+    -- Ping textures (mirroring minimap ping style)
+    local pingFrame = CreateFrame("Frame", nil, f)
+    pingFrame:SetSize(160, 160)
+    pingFrame:SetPoint("CENTER")
+    pingFrame:Hide()
+    pingFrame.centerRing = pingFrame:CreateTexture(nil, "OVERLAY")
+    pingFrame.centerRing:SetTexture("Interface\\minimap\\UI-Minimap-Ping-Center")
+    pingFrame.centerRing:SetSize(80, 80)
+    pingFrame.centerRing:SetPoint("CENTER")
+    pingFrame.rotatingRing = pingFrame:CreateTexture(nil, "OVERLAY")
+    pingFrame.rotatingRing:SetTexture("Interface\\minimap\\UI-Minimap-Ping-Rotate")
+    pingFrame.rotatingRing:SetSize(120, 120)
+    pingFrame.rotatingRing:SetPoint("CENTER")
+    pingFrame.expandingRing = pingFrame:CreateTexture(nil, "OVERLAY")
+    pingFrame.expandingRing:SetTexture("Interface\\minimap\\UI-Minimap-Ping-Expand")
+    pingFrame.expandingRing:SetSize(80, 80)
+    pingFrame.expandingRing:SetPoint("CENTER")
+    pingFrame.animation = pingFrame:CreateAnimationGroup()
+    pingFrame.animation:SetLooping("REPEAT")
+    local rotationAnim = pingFrame.animation:CreateAnimation("Rotation")
+    rotationAnim:SetTarget(pingFrame.rotatingRing)
+    rotationAnim:SetDegrees(-180)
+    rotationAnim:SetDuration(0.8)
+    rotationAnim:SetOrder(1)
+    local scaleAnim = pingFrame.animation:CreateAnimation("Scale")
+    scaleAnim:SetTarget(pingFrame.expandingRing)
+    if (scaleAnim.SetFromScale) then
+        scaleAnim:SetFromScale(0.1, 0.1)
+        scaleAnim:SetToScale(1.5, 1.5)
+    else
+        scaleAnim:SetScaleFrom(0.1, 0.1)
+        scaleAnim:SetScaleTo(1.5, 1.5)
+    end
+    scaleAnim:SetDuration(0.8)
+    scaleAnim:SetOrder(1)
+    f.pingFrame = pingFrame
+
+    f:Hide()
+    return f
+end
+
+local function UpdateScreenArrow(rads, distance, enablePingAnimation)
+    if (not ENABLE_SCREEN_ARROW) then return end
+    if (not screenArrow) then
+        screenArrow = CreateScreenArrow()
+    end
+    if (rads) then
+        if (distance and distance <= SCREEN_ARROW_PROXIMITY) then
+            -- Show ping, hide arrow
+            if (screenArrow.arrowTexture:IsShown()) then screenArrow.arrowTexture:Hide() end
+            if (not screenArrow.pingFrame:IsShown()) then
+                screenArrow.pingFrame:Show()
+                if (enablePingAnimation) then
+                    screenArrow.pingFrame.animation:Play()
+                end
+            end
+        else
+            -- Show arrow, hide ping
+            if (screenArrow.pingFrame:IsShown()) then
+                screenArrow.pingFrame.animation:Stop()
+                screenArrow.pingFrame:Hide()
+            end
+            if (not screenArrow.arrowTexture:IsShown()) then screenArrow.arrowTexture:Show() end
+            screenArrow.arrowTexture:SetRotation(rads)
+        end
+        if (not screenArrow:IsShown()) then screenArrow:Show() end
+    else
+        if (screenArrow.pingFrame:IsShown()) then
+            screenArrow.pingFrame.animation:Stop()
+            screenArrow.pingFrame:Hide()
+        end
+        if (screenArrow:IsShown()) then screenArrow:Hide() end
+    end
+end
+
 local function OnUpdate()
     if (active) then
         local playerFacing = GetPlayerFacing()
@@ -49,11 +154,13 @@ local function OnUpdate()
         local hasPosition = playerFacing and unitPositionX and unitPositionY
         for arrow, arrowActive in pairs(arrows) do
             if (hasPosition and arrowActive) then
+                local rawRads = math.atan2((arrow.worldTargetY - unitPositionY), arrow.worldTargetX - unitPositionX)
                 local distance = addon.GetDistanceInYards(
                         arrow.worldTargetX,
                         arrow.worldTargetY,
                         unitPositionX,
                         unitPositionY)
+                UpdateScreenArrow(rawRads - playerFacing, distance, arrow.enablePingAnimation)
                 local r = GetViewRadius()
                 if (distance > r * 0.75) then
                     if (not arrow:IsShown()) then arrow:Show() end
@@ -65,7 +172,7 @@ local function OnUpdate()
                     if (GetCVar("rotateMinimap") == "1") then
                         adj = adj - playerFacing
                     end
-                    local rads = math.atan2((arrow.worldTargetY - unitPositionY), arrow.worldTargetX - unitPositionX) + adj
+                    local rads = rawRads + adj
                     local rotation = rads + (math.pi * 0.50)
                     arrow.overlay:SetRotation(rads)
                     arrow.background:SetRotation(rads)
@@ -106,6 +213,7 @@ local function OnUpdate()
                     arrow.ping:Hide()
                 end
                 if (arrow:IsShown()) then arrow:Hide() end
+                UpdateScreenArrow(nil)
             end
         end
     end

@@ -24,7 +24,7 @@ popupDialog = {
     showAlert = true,
     preferredIndex = 3,
     run = function(itemID, itemName)
-        popupDialog.text = "¿Estás seguro de que quieres eliminar " .. (itemName or "the item") .. "?"
+        popupDialog.text = "Are you sure you want to destroy " .. (itemName or "the item") .. "?"
         popupDialog.itemID = itemID
         StaticPopup_Show("JoanasGuides_CONFIRM_DESTROY_ITEM")
     end
@@ -33,15 +33,17 @@ popupDialog = {
 setmetatable(popupDialog, popupDialogMetatable)
 
 local destroyItemMacroTemplate = "/run StaticPopupDialogs.JoanasGuides_CONFIRM_DESTROY_ITEM.run(%s, '%s')"
-local targetSingleMacroTemplate1 = "/target %s\n/cleartarget [dead]"
-local targetSingleMacroTemplate2 = "/target [noexists] %s\n/cleartarget [dead]"
 
-local targetSingleMacroTemplateAllowDead1 = "/target %s"
-local targetSingleMacroTemplateAllowDead2 = "/target [noexists] %s"
-
+local targetSingleMacroTemplate1Mark = "/cleartarget [exists]\n/tar %s\n/cleartarget [dead]\n/tm %s"
+local targetSingleMacroTemplate2Mark = "/cleartarget [exists]\n/tar [noexists] %s\n/cleartarget [dead]\n/tm %s"
+local targetSingleMacroTemplateAllowDead1Mark = "/cleartarget [exists]\n/tar %s\n/tm %s"
+local targetSingleMacroTemplateAllowDead2Mark = "/cleartarget [exists]\n/tar [noexists] %s\n/tm %s"
+local targetSingleMacroTemplate1 = "/tar %s\n/cleartarget [dead]"
+local targetSingleMacroTemplate2 = "/tar [noexists] %s\n/cleartarget [dead]"
+local targetSingleMacroTemplateAllowDead1 = "/tar %s"
+local targetSingleMacroTemplateAllowDead2 = "/tar [noexists] %s"
 
 StaticPopupDialogs["JoanasGuides_CONFIRM_DESTROY_ITEM"] = popupDialog
-
 
 function CalculateYOffset(fromY, button)
     --todo: Check for nil safety - this should never be called if it's not going to be visible and has a parent
@@ -388,6 +390,7 @@ function ActionButtonMixin:SetTargets(npcIDs)
     if (type(npcIDs) ~= "table") then
         npcIDs = { npcIDs }
     end
+    local reaction = GetNPCReaction(npcIDs[1])
     self.npcIDs = npcIDs
     self.targetStrings = { }
     local macroText = { "/cleartarget\n" }
@@ -395,15 +398,25 @@ function ActionButtonMixin:SetTargets(npcIDs)
     for i, npcID in ipairs(npcIDs) do
         local targetString =  Names.GetName(GetCreatureName,npcID)
         table.insert(self.targetStrings, targetString)
-        local template1, template2 = targetSingleMacroTemplate1, targetSingleMacroTemplate2
+        local template1, template2
         if (self.buttonRef.allowdead) then
-            template1, template2 = targetSingleMacroTemplateAllowDead1, targetSingleMacroTemplateAllowDead2
+            if (IsRetailAPI() and State.IsTargetMarkingEnabled()) then
+                template1, template2 = targetSingleMacroTemplateAllowDead1Mark, targetSingleMacroTemplateAllowDead2Mark
+            else
+                template1, template2 = targetSingleMacroTemplateAllowDead1, targetSingleMacroTemplateAllowDead2
+            end
+        else
+            if (IsRetailAPI() and State.IsTargetMarkingEnabled()) then
+                template1, template2 = targetSingleMacroTemplate1Mark, targetSingleMacroTemplate2Mark
+            else
+                template1, template2 = targetSingleMacroTemplate1, targetSingleMacroTemplate2
+            end
         end
         local newMacroText
         if (i == 1) then
-            newMacroText = string.format(template1, targetString)
+            newMacroText = string.format(template1, targetString, (reaction == 3) and 5 or 8)
         else
-            newMacroText = string.format(template2, targetString)
+            newMacroText = string.format(template2, targetString, (reaction == 3) and 5 or 8)
         end
         local newCount = charCount + #newMacroText
         if (newCount <= 255) then

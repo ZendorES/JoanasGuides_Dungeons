@@ -3,7 +3,7 @@ select(2, ...).SetupGlobalFacade()
 
 local TaskType = Mixin({
 	type = "complete",
-	taskPrefix = L["Haz: |C%s%s|r"],
+	taskPrefix = L["Do: |C%s%s|r"],
 	taskColor = Color.QUEST_DO,
 	incompleteIcon = IconService.GetIconInfo("worldquest-icon-pvp-ffa")
 }, DoQuestMixin)

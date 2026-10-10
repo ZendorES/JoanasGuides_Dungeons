@@ -13,7 +13,7 @@ end
 
 function TaskType:RenderFunc(task, container)
     container.text:SetShown(true)
-    container.text:SetText("Muere a proposito")
+    container.text:SetText("Die on purpose")
 end
 
 function TaskType:Setup(task)

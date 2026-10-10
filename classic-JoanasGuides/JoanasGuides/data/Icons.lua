@@ -63,13 +63,4 @@ Icons = {
 		atlas = "worldquest-icon-pvp-ffa",
 		scale = 0.75
 	},
-	["coin-gold"] = {
-		texture = "Interface/MoneyFrame/UI-GoldIcon",
-	},
-	["coin-silver"] = {
-		texture = "Interface/MoneyFrame/UI-SilverIcon",
-	},
-	["coin-copper"] = {
-		texture = "Interface/MoneyFrame/UI-CopperIcon",
-	},
 }

@@ -23,7 +23,7 @@ function GetCreatureInfo(creatureID)
 		dataMineTooltip:SetOwner(UIParent, "ANCHOR_NONE")
 		dataMineTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(creatureID))
 		local creatureName = dataMineNameText:GetText()
-		if (creatureName) then
+		if (creatureName and canaccessvalue(creatureName)) then
 			local line2 = dataMineText2:GetText()
 			creatureInfo = {
 				name = creatureName,

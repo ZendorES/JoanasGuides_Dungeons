@@ -81,7 +81,29 @@ end
 
 local wowversion = select(7,GetBuildInfo())
 if (not wowversion) then wowversion = select(4, GetBuildInfo()) end
+local isRetailAPI = not (wowversion < 16000 or (wowversion >= 20000 and wowversion < 120000))
 
 function GetWowVersion()
 	return wowversion
 end
+
+function IsRetailAPI()
+	return isRetailAPI
+end
+
+function InRetailCombatLockdown()
+	return isRetailAPI and InCombatLockdown()
+end
+
+GetItemCount = GetItemCount or C_Item.GetItemCount
+GetItemInfo = GetItemInfo or C_Item.GetItemInfo
+GetItemInfoInstant = GetItemInfoInstant or C_Item.GetItemInfoInstant
+GetFactionInfoByID = GetFactionInfoByID or function(repID)
+	local result = C_Reputation and C_Reputation.GetFactionDataByID and C_Reputation.GetFactionDataByID(repID)
+	if (result) then
+		return result.name, result.description, result.reaction
+	else
+		return nil, nil, 0
+	end
+end
+canaccessvalue = canaccessvalue or function() return true end

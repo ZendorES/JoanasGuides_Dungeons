@@ -478,12 +478,16 @@ function Condition_OnAddonLoad()
 	context["PHASE"] = 6
 	if (gameVersion < 20000) then
 		context["ERA"] = true
-		local season = C_Seasons.GetActiveSeason() or 0
-		if (season == Enum.SeasonID.Fresh or season == Enum.SeasonID.FreshHardcore) then
-			context["PHASE"] = 1
-		end
-		if (season == Enum.SeasonID.SeasonOfDiscovery) then
-			context["SOD"] = true
+		if (gameVersion < 16000) then
+			local season = C_Seasons.GetActiveSeason() or 0
+			if (season == Enum.SeasonID.Fresh or season == Enum.SeasonID.FreshHardcore) then
+				context["PHASE"] = 1
+			end
+			if (season == Enum.SeasonID.SeasonOfDiscovery) then
+				context["SOD"] = true
+			end
+		else
+			context["FOREVER"] = true
 		end
 	elseif (gameVersion >= 30000 and gameVersion < 40000) then
 		context["WOTLK"] = true

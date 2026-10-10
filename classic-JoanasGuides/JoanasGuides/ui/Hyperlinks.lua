@@ -36,7 +36,7 @@ function Hyperlinks.GetExternalSiteURL(type, var)
         else
             gameSlug = "mop-classic"
         end
-        externalSiteBaseURLPattern = "https://www.wowhead.com/" .. gameSlug .. "/es/%s=%s"
+        externalSiteBaseURLPattern = "https://www.wowhead.com/" .. gameSlug .. "/%s=%s"
     end
     return string.format(externalSiteBaseURLPattern, type, var)
 end
