@@ -100,10 +100,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # =========================================================================
-      # 8. NOTIFICACIÓN A DISCORD (Añadido)
+      # 8. NOTIFICACIÓN A DISCORD (Zendor)
       # =========================================================================
       # Envía un aviso estético al canal configurado mediante la URL del Webhook
       - name: Notificar Nueva Release en Discord
         uses: SethCohen/github-releases-to-discord@v1
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+
+      # =========================================================================
+      # 9. NOTIFICACIÓN A DISCORD (Damned)
+      # =========================================================================
+      # Envía un aviso estético al canal configurado mediante la URL del Webhook
+      - name: Notificar Nueva Release en Discord
+        uses: SethCohen/github-releases-to-discord@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_DAMNED_WEBHOOK }}
