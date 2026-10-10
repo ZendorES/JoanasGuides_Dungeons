@@ -41,10 +41,7 @@ function TaskType:RenderFunc(task, container)
 	local owned = GetItemCount(task.getitem, false)
 	container.text:SetShown(true)
 	local _, _, _, _, icon = GetItemInfoInstant(task.getitem)
-	if (not icon) then
-		icon = 134400
-	end
-	container.text:SetText(L["Get %s/%s |T%s:14:14:0:0|t |c%s%s|r "]:format((owned < quantity) and owned or quantity,
+	container.text:SetText(L["Consigue %s/%s |T%s:14:14:0:0|t |c%s%s|r "]:format((owned < quantity) and owned or quantity,
 			quantity, icon, Color.ITEM, name))
 end
 

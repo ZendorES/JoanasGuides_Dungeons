@@ -9,6 +9,7 @@ Illustrations = {
     { "diremaul-wotlk", 1277, 956 },
     { "dr-boom-trick", 1920, 1024 },
     { "lab-work-chart", 1024, 731 },
+    { "goblin-transponder", 474, 480 },
     { "grom-to-uc-zeppelin-death", 878, 746 },
     { "grom-to-uc-zeppelin-live", 878, 746 },
     { "human-warlock-imp", 1822, 1024 },

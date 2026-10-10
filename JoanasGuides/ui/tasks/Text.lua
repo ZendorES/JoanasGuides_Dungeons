@@ -98,9 +98,6 @@ widgetHandlers = {
 	item = { renderFunc = function(widget, output, default)
 		if (widget.showicon ~= false) then
 			local _, _, _, _, icon = GetItemInfoInstant(widget.item)
-			if (not icon) then
-				icon = 134400
-			end
 			table.insert(output[#output], string.format("|T%s:14:14:0:0|t ", icon))
 		end
 		ColorItemName(widget, output, default)
@@ -108,9 +105,9 @@ widgetHandlers = {
 			local itemCount = GetItemCount(widget.item, false)
 			local bankItemCount = GetItemCount(widget.item, true) - itemCount
 			if (bankItemCount > 0) then
-				table.insert(output[#output], string.format(" (%s in bags; %s in bank)", itemCount, bankItemCount))
+				table.insert(output[#output], string.format(" (%s en las bolsas; %s en el banco)", itemCount, bankItemCount))
 			else
-				table.insert(output[#output], string.format(" (%s in bags)", itemCount))
+				table.insert(output[#output], string.format(" (%s en las bolsas)", itemCount))
 			end
 		end
 	end},
