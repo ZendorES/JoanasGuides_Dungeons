@@ -30,7 +30,7 @@ jobs:
         run: |
           TAG="${{ github.event.release.tag_name }}"
           NOMBRE_ZIP="JoanasGuides-${TAG}.zip"
-          zip -r "$NOMBRE_ZIP" JoanasGuides JoanasGuides-Era
+          zip -r "$NOMBRE_ZIP" JoanasGuides
           echo "zip_name=$NOMBRE_ZIP" >> $GITHUB_OUTPUT
 
       # =========================================================================
