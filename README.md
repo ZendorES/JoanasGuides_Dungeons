@@ -82,7 +82,7 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | Mazmorra              |    Estado   |
 | --------------------- | :---------: |
 | Salón de los Feudales | ⏳ Pendiente |
-| Ruinas de Lordaeron   | ⏳ Pendiente |
+| Ruinas de Lordaeron   | ✅ Disponible |
 | Excavación de Whelgar | ⏳ Pendiente |
 | Ciudad de Dalaran     | ⏳ Pendiente |
 | Bastión Krol’dok      | ⏳ Pendiente |
