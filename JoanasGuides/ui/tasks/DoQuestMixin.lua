@@ -41,7 +41,7 @@ function DoQuestMixin:RenderFunc(task, container)
 	local objectivesMap = { }
 	task.warn = nil
 	if (QuestStatus.GetQuestStatus(questID) == 0) then
-		task.warn = string.format("|c%sYou don't have this quest|r", Color.RED_TEXT)
+		task.warn = string.format("|c%sNo tienes esta misión.|r", Color.RED_TEXT)
 		for _, taskGroup in ipairs(task.root) do
 			for _, task_ in ipairs(taskGroup) do
 				if (questID == task_.accept) then
