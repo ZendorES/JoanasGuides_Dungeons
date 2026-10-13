@@ -13,6 +13,9 @@ local GuideModulesBase = {
 	Starter = {
 		name = "Starter",
 	},
+	Dungeons = {
+		name = "Dungeons",
+	},
 	SoD = {
 		name = "Season of Discovery",
 	},

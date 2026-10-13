@@ -13,7 +13,6 @@ end
 
 function Hyperlinks.GetNPCHyperlink(npcRef, useTitle)
     local npcID = npcRef.npc or npcRef.fromnpc
-    local npcName = Names.GetName(GetCreatureName, npcID)
     local label
     if (npcRef.label) then
         label = npcRef.label
@@ -21,7 +20,7 @@ function Hyperlinks.GetNPCHyperlink(npcRef, useTitle)
         local npcInfo = GetCreatureInfo(npcID)
         label = npcInfo and npcInfo.title or "..."
     else
-        label = npcName
+        label = Names.GetName(GetCreatureName, npcID)
     end
     return string.format("|c%s|Hnpc:%s:%s|h%s|h|r",
             NPCColor[GetNPCReaction(npcID)] or Color.NPC, npcID, Hyperlinks.CreateReference(npcRef), label)

@@ -968,4 +968,5 @@ GameObjectNames = {
 	[176544] = "Restos de Eva Sarkhdef",
 	[176545] = "Restos de Lucien Sarkhdef",
 	[176630] = "Recuerdo de Evocación",
+	[614679] = "Blasón de Lordaeron",
 }
