@@ -12,6 +12,13 @@ local dataMineText4 = _G[("%sDatamineTooltipTextLeft4"):format(addonName)]
 
 local creatureNameCache = { }
 
+local function IsCreatureLevelLine(text)
+	local levelPrefix = LEVEL
+	return type(levelPrefix) == "string"
+			and levelPrefix ~= ""
+			and string.sub(text, 1, string.len(levelPrefix)) == levelPrefix
+end
+
 function GetCreatureName(creatureID)
 	local creatureInfo = GetCreatureInfo(creatureID)
 	return creatureInfo and creatureInfo.name
@@ -23,13 +30,33 @@ function GetCreatureInfo(creatureID)
 		dataMineTooltip:SetOwner(UIParent, "ANCHOR_NONE")
 		dataMineTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(creatureID))
 		local creatureName = dataMineNameText:GetText()
-		if (creatureName and canaccessvalue(creatureName)) then
-			local line2 = dataMineText2:GetText()
+		local titleLine = dataMineText2:GetText()
+		local nameAccessible = canaccessvalue(creatureName)
+		local titleAccessible = canaccessvalue(titleLine)
+		local accessibleName
+		local accessibleTitle
+
+		if (nameAccessible and type(creatureName) == "string" and creatureName ~= "") then
+			accessibleName = creatureName
+		end
+		if (titleAccessible and type(titleLine) == "string" and titleLine ~= ""
+				and not IsCreatureLevelLine(titleLine)) then
+			accessibleTitle = titleLine
+		end
+
+		local localeNames = NPCNames and NPCNames[GetLocale()]
+		local fallback = localeNames and localeNames[creatureID]
+		local resolvedName = accessibleName or (fallback and fallback.name)
+		local resolvedTitle = accessibleTitle or (fallback and fallback.title)
+
+		if (resolvedName or resolvedTitle) then
 			creatureInfo = {
-				name = creatureName,
-				title = line2 and string.sub(line2,1,string.len(LEVEL)) ~= LEVEL and line2 or nil,
+				name = resolvedName,
+				title = resolvedTitle,
 			}
-			creatureNameCache[creatureID] = creatureInfo
+			if (accessibleName and titleAccessible) then
+				creatureNameCache[creatureID] = creatureInfo
+			end
 		end
 	end
 	return creatureInfo
