@@ -1,7 +1,12 @@
 # JoanasGuides_Dungeons
 Fan project, Guías en español para todas las mazmorras de WoW Classic y WoW Forever utilizando como base el addon Joanas Guides.
 
-Para descargar las últimas versiones, visita la sección de [Releases](https://github.com/ZendorES/JoanasGuides_Dungeons/releases).
+## Cómo Instalar
+Para utilizar el módulo de mazmorras que contiene las guías integrado en el addon JoanasGuides, primero necesitarás descargar el addon JoanasGuides de [CurseForge](https://www.curseforge.com/wow/addons/joanasguides) o [Wago](https://addons.wago.io/addons/joanasguides).
+
+Una vez instalado el addon, descarga la última versión del módulo de mazmorras que encontrarás en la sección de [Releases](https://github.com/ZendorES/JoanasGuides_Dungeons/releases), pega la carpeta JoanasGuides en el mismo directorio de Addons dond instalaste el addon y dale a Reemplazar cuando te lo pregunte.
+
+Tras esto, cuando entres al juego ya encontrarás el apartado de Mazmorras en el listado..
 
 # Mazmorras
 
@@ -69,7 +74,7 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | --------------------- | :---------: |
 | Salón de los Feudales | ⏳ Pendiente |
 | Ruinas de Lordaeron   | ⏳ Pendiente |
-| Excavación de Whelgar | ⏳ Pendiente |
+| Excavación: Los Humedales | ⏳ Pendiente |
 | Ciudad de Dalaran     | ⏳ Pendiente |
 | Bastión Krol’dok      | ⏳ Pendiente |
 | Ciudad Sumergida      | ⏳ Pendiente |
@@ -83,7 +88,7 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | --------------------- | :---------: |
 | Salón de los Feudales | ⏳ Pendiente |
 | Ruinas de Lordaeron   | ✅ Disponible |
-| Excavación de Whelgar | ⏳ Pendiente |
+| Excavación: Los Humedales | ⏳ Pendiente |
 | Ciudad de Dalaran     | ⏳ Pendiente |
 | Bastión Krol’dok      | ⏳ Pendiente |
 | Ciudad Sumergida      | ⏳ Pendiente |
