@@ -54,7 +54,7 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | Uldaman                       | ✅ Disponible |
 | Zul'Farrak                    | ✅ Disponible |
 | Maraudon                      | ✅ Disponible |
-| El Templo Sumergido           | ✅ Disponible |
+| El Templo Sumergido           | ⏳ Pendiente  |
 | Profundidades de Roca Negra   | ✅ Disponible |
 | Cumbre de Roca Negra inferior | ✅ Disponible |
 | Cumbre de Roca Negra superior | ✅ Disponible |
