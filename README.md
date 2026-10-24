@@ -54,7 +54,7 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | Uldaman                       | ✅ Disponible |
 | Zul'Farrak                    | ✅ Disponible |
 | Maraudon                      | ✅ Disponible |
-| El Templo Sumergido           | ⏳ Pendiente  |
+| El Templo Sumergido           | ✅ Disponible |
 | Profundidades de Roca Negra   | ✅ Disponible |
 | Cumbre de Roca Negra inferior | ✅ Disponible |
 | Cumbre de Roca Negra superior | ✅ Disponible |
@@ -88,8 +88,8 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | --------------------- | :---------: |
 | Salón de los Feudales | ⏳ Pendiente |
 | Ruinas de Lordaeron   | ✅ Disponible |
-| Excavación: Los Humedales | ⏳ Pendiente |
-| Ciudad de Dalaran     | ⏳ Pendiente |
+| Excavación: Los Humedales | ✅ Disponible |
+| Ciudad de Dalaran     | ✅ Disponible |
 | Bastión Krol’dok      | ⏳ Pendiente |
 | Ciudad Sumergida      | ⏳ Pendiente |
 | Bastión Faucenegra    | ⏳ Pendiente |
