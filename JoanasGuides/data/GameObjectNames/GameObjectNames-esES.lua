@@ -969,4 +969,10 @@ GameObjectNames = {
 	[176545] = "Restos de Lucien Sarkhdef",
 	[176630] = "Recuerdo de Evocación",
 	[614679] = "Blasón de Lordaeron",
+	[673933] = "Hierba ampolla",
+	[659376] = "Tomo negro",
+	[672323] = "Foco de línea Ley",
+	[177964] = "Piedra de las profundidades",
+	[670427] = "Baúl de la celadora",
+	[656681] = "Escrito de Dalaran",
 }
