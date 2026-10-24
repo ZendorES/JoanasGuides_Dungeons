@@ -969,4 +969,10 @@ GameObjectNames = {
 	[176545] = "Restos de Lucien Sarkhdef",
 	[176630] = "Recuerdo de Evocación",
 	[614679] = "Crest of Lordaeron",
+	[673933] = "Blisterweed",
+	[659376] = "Black Tome",
+	[672323] = "Leyline Focus",
+	[177964] = "Fathom Stone",
+	[670427] = "Warden's Footlocker",
+	[656681] = "Dalaran Tome",
 }
