@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 LocationMixin = { }
@@ -91,7 +93,12 @@ function LocationMixin:IsValidCheckpoint()
     return CheckCondition(self) and Flags.HasFlag(self, "C")
 end
 
+function LocationMixin:IsNavigationSuppressed()
+    return self.polygon ~= nil and self.within
+end
+
 function LocationMixin:IsShown()
+    if (self:IsNavigationSuppressed()) then return false end
     return Flags.HasFlag(self, "V") or (self:IsActive() and not Flags.HasFlag(self, "H"))
 end
 

@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local function TooltipShow(frame, questRef, refType)
@@ -9,7 +11,7 @@ local function TooltipShow(frame, questRef, refType)
     else
         -- Classic Era (non-HC) version
         GuideTooltip:AddLine(Names.GetQuestName(questID))
-        if (C_QuestLog.IsOnQuest(questID)) then
+        if (C_QuestLog_IsOnQuest(questID)) then
             GuideTooltip:AddLine(L["You are on this quest"], 0, 1, 0)
         end
         local info = QuestInfo[questID]

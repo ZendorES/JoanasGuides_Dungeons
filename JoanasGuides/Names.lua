@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 Names = { }
@@ -51,7 +53,7 @@ end
 
 function Names.GetQuestName(questID)
 	-- force the quest objectives to pre-load whenever requesting the name as it is very likely to be needed soon
-	C_QuestLog.GetQuestObjectives(questID)
+	C_QuestLog_GetQuestObjectives(questID)
 	return Names.GetName(C_QuestLog.GetQuestInfo or C_QuestLog.GetTitleForQuestID, questID)
 end
 

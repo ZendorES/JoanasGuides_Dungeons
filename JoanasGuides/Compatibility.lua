@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local canUseQuestLinks = GameTooltip.SetPassThroughButtons and true or false
@@ -107,3 +109,17 @@ GetFactionInfoByID = GetFactionInfoByID or function(repID)
 	end
 end
 canaccessvalue = canaccessvalue or function() return true end
+
+C_QuestLog_IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
+C_QuestLog_IsOnQuest = C_QuestLog.IsOnQuest
+C_QuestLog_GetQuestObjectives = C_QuestLog.GetQuestObjectives
+
+C_Map = {
+    GetWorldPosFromMapPos = _G.C_Map.GetWorldPosFromMapPos,
+    GetMapPosFromWorldPos = _G.C_Map.GetMapPosFromWorldPos,
+    GetBestMapForUnit = _G.C_Map.GetBestMapForUnit,
+    GetPlayerMapPosition = _G.C_Map.GetPlayerMapPosition,
+    GetAreaInfo = _G.C_Map.GetAreaInfo,
+    GetMapInfo = _G.C_Map.GetMapInfo,
+    GetMapRectOnMap = _G.C_Map.GetMapRectOnMap,
+}

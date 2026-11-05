@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local continentIDCache = { }
@@ -78,39 +80,49 @@ function LocationsInitService.InitGuide(guide)
                         local objectives = CreateObjectivesList(task, questInfo)
                         for _, objectiveIdx in ipairs(objectives) do
                             local objective = questInfo.objectives[objectiveIdx]
-                            if (objective.around or objective.at or objective.location) then
-                                local location = {
-                                    objective.around or objective.at or objective.location,
-                                    label = objective.label,
-                                    area = objective.area,
-                                    gameobject = objective.gameobject,
-                                    condition = table.concat(createTaskLocationCondition(task, taskGroup, objectiveIdx))
-                                }
-                                if (not (objective.label or objective.area)) then
-                                    if (objective.around) then
-                                        location.label = "Around the area"
-                                    elseif (objective.at) then
-                                        if (objective.clicknpc and type(objective.clicknpc) ~= "table") then
-                                            location.npc = objective.clicknpc
-                                        elseif (objective.kill and type(objective.kill) ~= "table") then
-                                            location.npc = objective.kill
-                                        elseif (objective.clickgameobject and type(objective.clickgameobject) ~= "table") then
-                                            location.gameobject = objective.clickgameobject
-                                        elseif (objective.speakto) then
-                                            location.npc = objective.speakto
+                            local locField = objective.around or objective.at or objective.location
+                            if (locField) then
+                                local locStrings = type(locField) == "table" and locField or { locField }
+                                local condition = table.concat(createTaskLocationCondition(task, taskGroup, objectiveIdx))
+                                for _, locString in ipairs(locStrings) do
+                                    local location = {
+                                        locString,
+                                        label = objective.label,
+                                        area = objective.area,
+                                        gameobject = objective.gameobject,
+                                        condition = condition
+                                    }
+                                    if (not (objective.label or objective.area)) then
+                                        if (objective.around) then
+                                            location.label = "Around the area"
+                                        elseif (objective.at) then
+                                            if (objective.clicknpc and type(objective.clicknpc) ~= "table") then
+                                                location.npc = objective.clicknpc
+                                            elseif (objective.kill and type(objective.kill) ~= "table") then
+                                                location.npc = objective.kill
+                                            elseif (objective.clickgameobject and type(objective.clickgameobject) ~= "table") then
+                                                location.gameobject = objective.clickgameobject
+                                            elseif (objective.speakto) then
+                                                location.npc = objective.speakto
+                                            end
                                         end
                                     end
+                                    table.insert(step.locations, location)
                                 end
-                                table.insert(step.locations, location)
                             elseif (objective.goto) then
-                                table.insert(step.locations, {
-                                    objective.goto,
-                                    label = objective.label,
-                                    area = objective.area,
-                                    zone = objective.zone,
-                                    gameobject = objective.gameobject,
-                                    condition = table.concat(createTaskLocationCondition(task, taskGroup, objectiveIdx)),
-                                })
+                                local gotoField = objective.goto
+                                local gotoStrings = type(gotoField) == "table" and gotoField or { gotoField }
+                                local condition = table.concat(createTaskLocationCondition(task, taskGroup, objectiveIdx))
+                                for _, gotoString in ipairs(gotoStrings) do
+                                    table.insert(step.locations, {
+                                        gotoString,
+                                        label = objective.label,
+                                        area = objective.area,
+                                        zone = objective.zone,
+                                        gameobject = objective.gameobject,
+                                        condition = condition,
+                                    })
+                                end
                             end
                         end
                     end
@@ -127,10 +139,26 @@ function LocationsInitService.InitGuide(guide)
                     locationAsTable = location
                     location = location[1]
                 end
-                local flags, map, x, y, radius = strsplit("|", location)
-                map = remap(tonumber(map))
-                x = tonumber(x)
-                y = tonumber(y)
+                local parts = { strsplit("|", location) }
+                local flags = parts[1]
+                local map = remap(tonumber(parts[2]))
+                local polygon, x, y, radius
+                if (string.find(flags, "B")) then
+                    polygon = { }
+                    local cx, cy = 0, 0
+                    for i = 3, #parts, 2 do
+                        local px, py = tonumber(parts[i]), tonumber(parts[i + 1])
+                        polygon[#polygon + 1] = { px, py }
+                        cx = cx + px
+                        cy = cy + py
+                    end
+                    x = cx / #polygon
+                    y = cy / #polygon
+                else
+                    x = tonumber(parts[3])
+                    y = tonumber(parts[4])
+                    radius = parts[5]
+                end
                 local newLocation = Mixin({
                     flags = flags,
                     originalFlags = flags,
@@ -141,6 +169,7 @@ function LocationsInitService.InitGuide(guide)
                     worldY = 0,
                     within = false,
                     radius = radius ~= nil and tonumber(radius) or LOCATION_DEFAULT_RADIUS,
+                    polygon = polygon,
                     condition = condition,
                     label = locationAsTable and locationAsTable.label,
                     area = locationAsTable and locationAsTable.area,
@@ -157,7 +186,37 @@ function LocationsInitService.InitGuide(guide)
                     root = step,
                     idx = idx
                 }, LocationMixin)
-                if (Flags.HasFlag(newLocation, "W")) then
+                if (Flags.HasFlag(newLocation, "B")) then
+                    continentIDCache[map] = continentIDCache[map]
+                            or C_Map.GetWorldPosFromMapPos(map, { x = 0.5, y = 0.5 })
+                    newLocation.continentID = continentIDCache[map]
+                    if (Flags.HasFlag(newLocation, "W")) then
+                        newLocation.worldX = x
+                        newLocation.worldY = y
+                        local _, centroidPos = C_Map.GetMapPosFromWorldPos(continentIDCache[map], { x = x, y = y }, map)
+                        newLocation.x = centroidPos.x * 100
+                        newLocation.y = centroidPos.y * 100
+                        for _, vertex in ipairs(newLocation.polygon) do
+                            local _, mapPos = C_Map.GetMapPosFromWorldPos(continentIDCache[map], { x = vertex[1], y = vertex[2] }, map)
+                            vertex[3] = mapPos.x * 100
+                            vertex[4] = mapPos.y * 100
+                        end
+                    else
+                        newLocation.x = x
+                        newLocation.y = y
+                        local _, worldCentroid = C_Map.GetWorldPosFromMapPos(map, { x = x / 100, y = y / 100 })
+                        newLocation.worldX = worldCentroid and worldCentroid.x or 0
+                        newLocation.worldY = worldCentroid and worldCentroid.y or 0
+                        for _, vertex in ipairs(newLocation.polygon) do
+                            local _, worldPos = C_Map.GetWorldPosFromMapPos(map, { x = vertex[1] / 100, y = vertex[2] / 100 })
+                            local mapX, mapY = vertex[1], vertex[2]
+                            vertex[1] = worldPos and worldPos.x or 0
+                            vertex[2] = worldPos and worldPos.y or 0
+                            vertex[3] = mapX
+                            vertex[4] = mapY
+                        end
+                    end
+                elseif (Flags.HasFlag(newLocation, "W")) then
                     newLocation.worldX = x
                     newLocation.worldY = y
                     continentIDCache[map] = continentIDCache[map]

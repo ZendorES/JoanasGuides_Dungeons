@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local TaskType = Mixin({
@@ -8,6 +10,7 @@ local TaskType = Mixin({
 }, TaskTypeMixin)
 
 function TaskType:IsCompletedFunc(task)
+	if (ConditionContext["SEEKING"]) then return true end
 	return GetBindLocation() == C_Map.GetAreaInfo(task.sethearthstone)
 end
 
@@ -19,9 +22,9 @@ function TaskType:RenderFunc(task, container)
 	end
 	container.text:SetShown(true)
 	if (npcName) then
-		container.text:SetText(L["Habla con %s y haz |C%s%s|r sea tu nuevo hogar."]:format(npcName, Color.INN, areaName))
+		container.text:SetText(L["Speak to %s and make |C%s%s|r your new home."]:format(npcName, Color.INN, areaName))
 	else
-		container.text:SetText(L["Haz que |C%s%s|r sea tu nuevo hogar."]:format(Color.INN, areaName))
+		container.text:SetText(L["Make |C%s%s|r your new home."]:format(Color.INN, areaName))
 	end
 end
 

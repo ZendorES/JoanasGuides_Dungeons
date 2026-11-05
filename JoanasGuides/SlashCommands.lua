@@ -1,5 +1,10 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
+
+local slashslug = string.upper(Brand.slashCommand)
+local slashCommand = "/" .. Brand.slashCommand
 
 local handlers = {
 	show = function()
@@ -39,17 +44,35 @@ local handlers = {
 			GuideNavigationService.SetAutoAdvanceEnabled(false)
 			GuideNavigationService.SetStep(msg)
 		end
-	end
+	end,
+	dev = function()
+		local enabled = not State.IsDevEnabled()
+		State.SetDevEnabled(enabled)
+		DEFAULT_CHAT_FRAME:AddMessage(string.format("%s: Dev reload %s", addonTitle, enabled and "|cFF00FF00ON|r" or "|cFFFF0000OFF|r"))
+	end,
+	blob = function()
+		if (State.IsDevEnabled()) then ToggleBlobOverlay() end
+	end,
+	["blob next"] = function()
+		if (State.IsDevEnabled()) then CycleBlobOverlay() end
+	end,
+	["way clear"] = function()
+		ManualWaypointService.Clear()
+	end,
 }
 
 local function displayHelp()
-	DEFAULT_CHAT_FRAME:AddMessage("Show the guide interface: /joana show")
-	DEFAULT_CHAT_FRAME:AddMessage("Hide the guide interface: /joana hide")
-	DEFAULT_CHAT_FRAME:AddMessage("Enable the minimap button: /joana enable")
-	DEFAULT_CHAT_FRAME:AddMessage("Disable the minimap button: /joana disable")
-	DEFAULT_CHAT_FRAME:AddMessage("Next step: /joana next")
-	DEFAULT_CHAT_FRAME:AddMessage("Previous step: /joana back")
-	DEFAULT_CHAT_FRAME:AddMessage("Go to step in current guide (these also match webguides): /joana goto ##-##")
+	DEFAULT_CHAT_FRAME:AddMessage(string.format("Show the guide interface: %s show", slashCommand))
+	DEFAULT_CHAT_FRAME:AddMessage(string.format("Hide the guide interface: %s hide", slashCommand))
+	DEFAULT_CHAT_FRAME:AddMessage(string.format("Enable the minimap button: %s enable", slashCommand))
+	DEFAULT_CHAT_FRAME:AddMessage(string.format("Disable the minimap button: %s disable", slashCommand))
+	DEFAULT_CHAT_FRAME:AddMessage(string.format("Next step: %s next", slashCommand))
+	DEFAULT_CHAT_FRAME:AddMessage(string.format("Previous step: %s back", slashCommand))
+	if (Brand.hasWebGuides) then
+	else
+		DEFAULT_CHAT_FRAME:AddMessage(string.format("Go to step in current guide: %s goto ##-##", slashCommand))
+	end
+	DEFAULT_CHAT_FRAME:AddMessage(string.format("Set a waypoint: %s way <x> <y>", slashCommand))
 end
 
 local function handleSlashCommand(msg)
@@ -57,6 +80,10 @@ local function handleSlashCommand(msg)
 	if (not handlers[msg]) then
 		if (string.sub(msg,1,5)=="goto ") then
 			handlers.goto(string.sub(msg, 6))
+		elseif (string.sub(msg,1,4)=="way ") then
+			ManualWaypointService.HandleCommand(string.sub(msg, 5))
+		elseif (msg == "way") then
+			ManualWaypointService.HandleCommand("")
 		else
 			displayHelp()
 		end
@@ -65,6 +92,6 @@ local function handleSlashCommand(msg)
 	end
 end
 
-_G.SLASH_JOANA1 = "/joana"
+_G["SLASH_" .. slashslug .. "1"] = slashCommand
 
-SlashCmdList["JOANA"] = handleSlashCommand
+SlashCmdList[slashslug] = handleSlashCommand

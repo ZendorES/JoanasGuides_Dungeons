@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local component = UI.CreateComponent("HeaderBackButton")
@@ -17,8 +19,10 @@ function component.Init(components)
 	AddPushedTexture(frame, I["UI-SquareButton-Left-Down"])
 	frame:SetScript("OnClick", function()
 		if (IsShiftKeyDown()) then
+			GuideNavigationService.SetSeeking(true)
 			GuideNavigationService.SetManualOverrideEnabled(false)
 			GuideNavigationService.SetStepToPrevious(true)
+			GuideNavigationService.SetSeeking(false)
 		else
 			GuideNavigationService.SetManualOverrideEnabled(true)
 			GuideNavigationService.SetStepToPrevious()

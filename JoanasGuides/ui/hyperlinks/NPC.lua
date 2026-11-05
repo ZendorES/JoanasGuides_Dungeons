@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local function TooltipShow(_, npcRef)
@@ -13,6 +15,7 @@ end
 
 function Hyperlinks.GetNPCHyperlink(npcRef, useTitle)
     local npcID = npcRef.npc or npcRef.fromnpc
+    local npcName = Names.GetName(GetCreatureName, npcID)
     local label
     if (npcRef.label) then
         label = npcRef.label
@@ -20,7 +23,7 @@ function Hyperlinks.GetNPCHyperlink(npcRef, useTitle)
         local npcInfo = GetCreatureInfo(npcID)
         label = npcInfo and npcInfo.title or "..."
     else
-        label = Names.GetName(GetCreatureName, npcID)
+        label = npcName
     end
     return string.format("|c%s|Hnpc:%s:%s|h%s|h|r",
             NPCColor[GetNPCReaction(npcID)] or Color.NPC, npcID, Hyperlinks.CreateReference(npcRef), label)

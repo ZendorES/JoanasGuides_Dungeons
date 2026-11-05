@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local Init, OnEvent, OnUpdate
@@ -24,10 +26,10 @@ function Init(self, event, arg1)
 		PlacesService.Init()
 		State.Init()
 		KeybindService.Init()
+		Condition_OnAddonLoad()
 		UI.Init()
 		GuideModules.Reload()
 		GuideService.Init()
-		Condition_OnAddonLoad()
 		TaxiService.Init()
 		MountsService.Init()
 		RunesService.Init()
@@ -39,8 +41,12 @@ function Init(self, event, arg1)
 	if (addonLoaded and questLogUpdated) then
 		self:SetScript("OnEvent", OnEvent)
 		self:SetScript("OnUpdate", OnUpdate)
-		GuideNavigationService.SetGuide(State.GetLastGuide())
-		GuideNavigationService.SetStepFromBookmark()
+		CatalogService.CheckStartupPrompt()
+		local lastGuide = State.GetLastGuide()
+		if (lastGuide and CatalogService.IsConditionMet(lastGuide)) then
+			GuideNavigationService.SetGuide(lastGuide)
+			GuideNavigationService.SetStepFromBookmark()
+		end
 	end
 end
 
@@ -87,6 +93,7 @@ function OnUpdate(self, elapsed_)
 				end
 				--	If the step is complete and autoadvance is enabled, advance to the next step (fire 'when changing to a step' functions) and mark dirty
 				if (not GuideNavigationService.AutoAdvance()) then
+					GuideNavigationService.SetSeeking(false)
 					--	Otherwise:
 					--		Determine if the checkpoint should be updated and update the CHECKPOINT condition if necessary
 					--			If CHECKPOINT got changed, mark dirty
@@ -145,4 +152,22 @@ function MarkAllDirty()
 	isDirty = true
 	GuideNavigationService.ClearCaches()
 	WorkCompleteService.MarkDirty()
+end
+
+do
+	local taintFrame = CreateFrame("Frame")
+	taintFrame:RegisterEvent("ADDON_ACTION_BLOCKED")
+	taintFrame:SetScript("OnEvent", function(_, _, addonBlamed, blockedFunc)
+		if (addonBlamed == addonName) then
+			SavedVariables.taintLog = SavedVariables.taintLog or {}
+			local step = GuideNavigationService.GetStep()
+			table.insert(SavedVariables.taintLog, {
+				t = GetServerTime(),
+				func = blockedFunc,
+				combat = InCombatLockdown() and true or nil,
+				step = step and step.id or nil,
+				guide = GuideNavigationService.GetGuide() and GuideNavigationService.GetGuide().id or nil,
+			})
+		end
+	end)
 end

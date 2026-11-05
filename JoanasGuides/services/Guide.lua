@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local guideCache
@@ -30,12 +32,14 @@ function GuideService.Init()
 end
 
 function GuideService.GetGuide(guideID)
+    if (GuideModules.IsExpired()) then return nil end
+    if (CatalogService.CheckCompatibility()) then return nil end
     local guide = guideCache[guideID]
     if (not guide) then
         GuideModules.Reload()
         if (not guideInfoLookup) then
             guideInfoLookup = { }
-            for _, guideInfo in ipairs(GuideInfos) do
+            for _, guideInfo in ipairs(CatalogService.GetGuideInfos()) do
                 guideInfoLookup[guideInfo.guideID] = guideInfo
             end
         end
@@ -47,18 +51,32 @@ function GuideService.GetGuide(guideID)
                 return
             end
         end
-        local guideTemplate = ("%s-%s"):format(addonName, guideID)
-        local guideHTML = CreateFrame("SimpleHTML", nil, nil, guideTemplate)
-        local regions = { guideHTML:GetRegions() }
-        if (not (regions and #regions > 0)) then return end
-        local dataParts = { }
-        for _, region in ipairs(regions) do
-            table.insert(dataParts, RemoveSpaces(region:GetText()))
+        local guideTemplate = CatalogService.GetGuideTemplate(guideID)
+        if (not guideTemplate) then return end
+        local decryptKey = CatalogService.GetDecryptKey(guideID)
+        local expectedHash = CatalogService.GetContentHash(guideID)
+        local failReason
+        guide, failReason = LoadHTMLData(guideTemplate, MERCHANT_TYPE, decryptKey, expectedHash)
+        if (not guide and failReason == "hash_mismatch") then
+            CatalogService.Reload()
+            guideTemplate = CatalogService.GetGuideTemplate(guideID)
+            if (guideTemplate) then
+                decryptKey = CatalogService.GetDecryptKey(guideID)
+                expectedHash = CatalogService.GetContentHash(guideID)
+                guide, failReason = LoadHTMLData(guideTemplate, MERCHANT_TYPE, decryptKey, expectedHash)
+            end
         end
-        local f = loadstring(Base64.decode(table.concat(dataParts)))
-        setfenv(f, MERCHANT_TYPE)
-        guide = f()
-        assert(guide, ("Error extracting guide data: %s"):format(guideID))
+        if (not guide) then
+            if (failReason == "hash_mismatch") then
+                local slot = CatalogService.GetSlotInfo(guideID)
+                if (slot and slot.prefix == "External") then
+                    print("|cFFFF4444[" .. addonTitle .. "]|r Guide data integrity check failed. Please re-download your guide content.")
+                else
+                    print("|cFFFF4444[" .. addonTitle .. "]|r Guide data integrity check failed. Please reinstall the addon.")
+                end
+            end
+            return nil
+        end
         guide.info = guideInfo
         assert(guide.info, ("GuideInfo is not present: %s"):format(guideID))
         guide.id = guideID
@@ -126,6 +144,108 @@ function GuideService.GetGuide(guideID)
                 end
             end
         end
+        local function deepCopy(src)
+            if (type(src) ~= "table") then return src end
+            local copy = { }
+            for k, v in pairs(src) do
+                copy[k] = deepCopy(v)
+            end
+            return copy
+        end
+        local repeatingGroups = { }
+        for _, step in ipairs(guide) do
+            for i = #step, 1, -1 do
+                local taskGroup = step[i]
+                if (type(taskGroup) == "table" and taskGroup.repeatuntil) then
+                    table.insert(repeatingGroups, {
+                        source = taskGroup,
+                        untilID = taskGroup.repeatuntil,
+                    })
+                    taskGroup.repeatuntil = nil
+                    table.remove(step, i)
+                end
+            end
+            for _, rg in ipairs(repeatingGroups) do
+                local alreadyPresent = false
+                for _, tg in ipairs(step) do
+                    if (tg == rg.source) then
+                        alreadyPresent = true
+                        break
+                    end
+                end
+                if (not alreadyPresent) then
+                    table.insert(step, deepCopy(rg.source))
+                end
+            end
+            for i = #repeatingGroups, 1, -1 do
+                if (repeatingGroups[i].untilID == step.id) then
+                    table.remove(repeatingGroups, i)
+                end
+            end
+        end
+        for _, step in ipairs(guide) do
+            for _, taskGroup in ipairs(step) do
+                for taskIdx = #taskGroup, 1, -1 do
+                    local task = taskGroup[taskIdx]
+                    if (task.complete and task.startduring) then
+                        local quests = task.startduring
+                        if (type(quests) == "number") then
+                            quests = { quests }
+                        end
+                        local startParts = { }
+                        local completeParts = { }
+                        for i, questID in ipairs(quests) do
+                            if (i > 1) then
+                                table.insert(startParts, " or ")
+                                table.insert(completeParts, " and ")
+                            end
+                            table.insert(startParts, "QUEST[")
+                            table.insert(startParts, questID)
+                            table.insert(startParts, "] < COMPLETED")
+                            table.insert(completeParts, "QUEST[")
+                            table.insert(completeParts, questID)
+                            table.insert(completeParts, "] >= COMPLETED")
+                        end
+                        local startCond = table.concat(startParts)
+                        local completeCond = table.concat(completeParts)
+                        if (#quests > 1) then
+                            startCond = "(" .. startCond .. ")"
+                        end
+                        if (task.condition) then
+                            startCond = "(" .. task.condition .. ") and " .. startCond
+                            completeCond = "(" .. task.condition .. ") and " .. completeCond
+                        end
+                        local startTask = { startwork = task.complete, condition = startCond }
+                        if (task.objective) then startTask.objective = task.objective end
+                        if (task.objectives) then startTask.objectives = task.objectives end
+                        task.condition = completeCond
+                        task.startduring = nil
+                        table.insert(taskGroup, taskIdx, startTask)
+                    end
+                end
+            end
+        end
+        local locationFields = { "around", "at", "goto", "location" }
+        for _, questInfo in pairs(guide.quests) do
+            if (questInfo.locations and questInfo.objectives) then
+                for _, objective in ipairs(questInfo.objectives) do
+                    for _, field in ipairs(locationFields) do
+                        local val = objective[field]
+                        if (val) then
+                            if (type(val) == "number") then
+                                objective[field] = questInfo.locations[val]
+                            elseif (type(val) == "table") then
+                                local resolved = { }
+                                for _, idx in ipairs(val) do
+                                    resolved[#resolved + 1] = questInfo.locations[idx]
+                                end
+                                objective[field] = resolved
+                            end
+                        end
+                    end
+                end
+            end
+        end
         LocationsInitService.InitGuide(guide)
         ButtonGenerationService.GenerateButtons(guide)
         guide.stepLUT = { }
@@ -187,7 +307,7 @@ function GuideService.GetGuide(guideID)
         if (moduleInfo and moduleInfo.installed and moduleInfo.compatible) then
             guide.moduleInfo = moduleInfo
             if (State.IsDebugEnabled()) then
-                ValidateGuide()
+                ValidateGuide(guide)
             end
         else
             guide = nil

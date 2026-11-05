@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local TaskType = Mixin({
@@ -10,8 +12,8 @@ local TaskType = Mixin({
 local defaultText = {
 	[MERCHANT_TYPE.STABLEIN] = "Stable your main pet",
 	[MERCHANT_TYPE.STABLEOUT] = "Get your main pet out of the stable",
-	[MERCHANT_TYPE.REPAIRS] = "Get Repaired/Resupplied",
-	[MERCHANT_TYPE.SUPPLIES] = "Get Resupplied",
+	[MERCHANT_TYPE.REPAIRS] = "Sell junk, Repair, and Resupply",
+	[MERCHANT_TYPE.SUPPLIES] = "Sell junk and Resupply",
 	[MERCHANT_TYPE.TALENTS] = "Get new Spells/Abilities",
 	[MERCHANT_TYPE.WEAPONSKILLS] = "Learn new Weapon Possibilities",
 	[MERCHANT_TYPE.TRADESKILLS] = "Get new Tradeskills",
@@ -38,6 +40,7 @@ local checkFunctions = {
 }
 
 function TaskType:IsCompletedFunc(task)
+	if (ConditionContext["SEEKING"]) then return true end
 	return checkFunctions[task.merchant](task.root)
 end
 

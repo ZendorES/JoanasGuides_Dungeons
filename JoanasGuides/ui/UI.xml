@@ -1,4 +1,6 @@
-<!-- See license.txt for license and copyright information -->
+<!-- Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. -->
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 
@@ -23,7 +25,6 @@
 	<Script file="ui/HeaderNextButton.lua" />
 	<Script file="ui/HeaderBackButton.lua" />
 	<Script file="ui/MinimapButton.lua" />
-	<Script file="ui/Warning.lua" />
 	<Script file="ui/GuideMenu.lua" />
 	<Script file="ui/TaskGroupContainers.lua" />
 	<Script file="ui/Waypoints.lua" />
@@ -35,6 +36,7 @@
 	<Script file="ui/GuideComplete.lua" />
 	<Script file="ui/Target.lua" />
 	<Script file="ui/map/MapPinsContainer.lua" />
+	<Script file="ui/map/MapBlobOverlay.lua" />
 	<Script file="ui/TaskType.lua" />
 	<Script file="ui/tasks/BankTaskMixin.lua" />
 	<Script file="ui/tasks/DoQuestMixin.lua" />
@@ -52,6 +54,7 @@
 	<Script file="ui/tasks/Level.lua" />
 	<Script file="ui/tasks/Merchant.lua" />
 	<Script file="ui/tasks/NPC.lua" />
+	<Script file="ui/tasks/Prereqs.lua" />
 	<Script file="ui/tasks/SetHearthStone.lua" />
 	<Script file="ui/tasks/SpiritRes.lua" />
 	<Script file="ui/tasks/StartWork.lua" />

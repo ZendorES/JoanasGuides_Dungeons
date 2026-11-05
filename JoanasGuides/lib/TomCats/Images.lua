@@ -1,19 +1,18 @@
---[[
-Images.lua
-Copyright (C) 2018-2023 TomCat's Tours
-All rights reserved.
-
-For more information, contact via email at tomcat@tomcatstours.com
-(or visit https://www.tomcatstours.com)
-]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
-local imagesPattern = "Interface\\AddOns\\%s\\images\\%s.blp"
+local imagesPattern = "Interface\\AddOns\\%s\\images\\%s%s"
 
 I = { }
 
 setmetatable(I, {
 	__index = function(_, key)
-		return imagesPattern:format(addonName, key)
+		local ext = ".blp"
+		if key:match("%.[^%.]+$") then
+			ext = ""
+		end
+		return imagesPattern:format(addonName, key, ext)
 	end,
 })

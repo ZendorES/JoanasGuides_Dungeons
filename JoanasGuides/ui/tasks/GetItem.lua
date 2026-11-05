@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local TaskType = Mixin({
@@ -41,7 +43,10 @@ function TaskType:RenderFunc(task, container)
 	local owned = GetItemCount(task.getitem, false)
 	container.text:SetShown(true)
 	local _, _, _, _, icon = GetItemInfoInstant(task.getitem)
-	container.text:SetText(L["Consigue %s/%s |T%s:14:14:0:0|t |c%s%s|r "]:format((owned < quantity) and owned or quantity,
+	if (not icon) then
+		icon = 134400
+	end
+	container.text:SetText(L["Get %s/%s |T%s:14:14:0:0|t |c%s%s|r "]:format((owned < quantity) and owned or quantity,
 			quantity, icon, Color.ITEM, name))
 end
 

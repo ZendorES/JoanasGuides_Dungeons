@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local wowversion = select(7,GetBuildInfo())
@@ -46,7 +48,10 @@ function RefreshSkillPoints()
 		for i = 1, 5 do
 			if (professions[i]) then
 				local _, _, skillLevel, _, _, _, skillLine = GetProfessionInfo(professions[i])
-				skillPoints[ProfessionsSkillLinesLUT[skillLine]] = skillLevel
+				local profKey = ProfessionsSkillLinesLUT[skillLine]
+				if (profKey) then
+					skillPoints[profKey] = skillLevel
+				end
 			end
 		end
 	end

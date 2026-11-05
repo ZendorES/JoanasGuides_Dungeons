@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local component = UI.CreateComponent("Hyperlinks")
@@ -25,10 +27,10 @@ function Hyperlinks.GetExternalSiteURL(type, var)
     if (not externalSiteBaseURLPattern) then
         local gameVersion = GetWowVersion()
         local gameSlug
-        if (gameVersion < 16000) then
-            gameSlug = "classic"
-        elseif (gameVersion >= 16000 and gameVersion < 20000) then
+        if (gameVersion >= 16000 and gameVersion < 20000) then
             gameSlug = "forever"
+        elseif (gameVersion < 16000) then
+            gameSlug = "classic"
         elseif (gameVersion >= 20000 and gameVersion < 30000) then
             gameSlug = "tbc"
         elseif (gameVersion >= 30000 and gameVersion < 40000) then
@@ -38,7 +40,7 @@ function Hyperlinks.GetExternalSiteURL(type, var)
         else
             gameSlug = "mop-classic"
         end
-        externalSiteBaseURLPattern = "https://www.wowhead.com/" .. gameSlug .. "/es/%s=%s"
+        externalSiteBaseURLPattern = "https://www.wowhead.com/" .. gameSlug .. "/%s=%s"
     end
     return string.format(externalSiteBaseURLPattern, type, var)
 end

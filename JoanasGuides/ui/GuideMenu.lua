@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local component = UI.CreateComponent("GuideMenu")
@@ -9,12 +11,13 @@ local function createGuideMenu()
 	local menuData = { }
 	local recommendedMenuData = { }
 	local submenus = { }
-	for _, guideInfo in ipairs(GuideInfos) do
+	for _, guideInfo in ipairs(CatalogService.GetGuideInfos()) do
 		local moduleInfo = GuideModules.GetModule(guideInfo.moduleID)
 		if (moduleInfo) then
 			if (CheckCondition(guideInfo)) then
-				local installed = moduleInfo.installed
-				local compatible = moduleInfo.compatible
+				local installed = CatalogService.IsInstalled(guideInfo.guideID)
+				local incompatibleReason = CatalogService.CheckCompatibility()
+				local compatible = installed and not GuideModules.IsExpired() and not incompatibleReason
 				local _menu = menuData
 				if (guideInfo.group) then
 					local submenu = submenus[guideInfo.group]
@@ -55,14 +58,53 @@ local function createGuideMenu()
 					end,
 					func = function()
 						if (installed and compatible) then
-							if (GuideNavigationService.IsGuideSet() and guideInfo.guideID == GuideNavigationService.GetGuide().id) then
+							if (CatalogService.HandleStubGuide(guideInfo.guideID)) then
+								-- stub handled, do nothing
+							elseif (GuideNavigationService.IsGuideSet() and guideInfo.guideID == GuideNavigationService.GetGuide().id) then
 								GuideNavigationService.SetGuide(nil)
 							else
+								GuideNavigationService.SetSeeking(true)
 								GuideNavigationService.Goto(guideInfo.guideID)
 							end
 						else
-							DEFAULT_CHAT_FRAME:AddMessage(string.format("|cFFFF0000Warning:|r |cFFFFD100You do not have '%s' installed.|r", guideInfo.description))
-							DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100For support inquiries, visit https://joanasworld.com|r")
+							if (GuideModules.IsExpired()) then
+								TogglePopup(
+									nil, nil, nil, nil, nil,
+									"|cFFFF0000UPDATE REQUIRED:|r\n\n|cFFFFD100" .. addonTitle .. "|r\n\nPlease update your addon"
+								)
+							elseif (incompatibleReason == "addon") then
+								TogglePopup(
+									nil, nil, nil, nil, nil,
+									"|cFFFF0000INCOMPATIBLE:|r\n\n|cFFFFD100" .. addonTitle .. "|r\n\nPlease update your addon"
+								)
+							elseif (incompatibleReason == "guide") then
+								TogglePopup(
+									nil, nil, nil, nil, nil,
+									"|cFFFF0000GUIDE UPDATE REQUIRED:|r\n\n|cFFFFD100" .. addonTitle .. "|r\n\nYour guide data is outdated.\nPlease run the " .. Brand.installerName .. "\nto update your guides."
+								)
+							elseif (GuideModules.HasLegacyModules()) then
+								TogglePopup(
+									Brand.website,
+									"Press Ctrl-C to copy the link",
+									nil, nil, nil,
+									"|cFFFF0000GUIDE UPDATE REQUIRED:|r\n\n|cFFFFD100" .. addonTitle .. "|r\n\nYour installed guides are not compatible\nwith this version of the addon.\n\nPlease visit our website to get the update:"
+								)
+							else
+								-- D folder may have been installed since the menu was built
+								CatalogService.Reload()
+								if (CatalogService.IsInstalled(guideInfo.guideID)) then
+									GuideNavigationService.SetSeeking(true)
+									GuideNavigationService.Goto(guideInfo.guideID)
+								else
+									local freeText = Flags.HasFlag(guideInfo, "F") and "\n(This guide is FREE!)" or ""
+									TogglePopup(
+										Brand.website,
+										"Press Ctrl-C to copy the link",
+										nil, nil, nil,
+										string.format("|cFFFF0000GUIDE NOT INSTALLED:|r\n\n|cFFFFD100%s|r" .. freeText .. "\n\nVisit our website to get it:", guideInfo.description)
+									)
+								end
+							end
 						end
 						UI.CloseGuideMenu()
 					end,
@@ -240,7 +282,7 @@ local function createGuideMenu()
 			menuData,
 			1,
 			{
-				text = string.format("%s v%s", L["Joana's Speed Leveling Guides"], GuideModules.GetAddonVersion()),
+				text = string.format("%s %s", addonTitle, GetDisplayVersion()),
 				isTitle = true,
 				notCheckable = true,
 			})

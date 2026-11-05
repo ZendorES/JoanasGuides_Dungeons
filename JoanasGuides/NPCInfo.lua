@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 --[[
@@ -19,16 +21,16 @@ function GetNPCReaction(npcID)
 end
 
 NPCRaces = {
-    [1] = "Humano",
-    [2] = "Orco",
-    [3] = "Enano",
-    [4] = "Elfo de la Noche",
-    [5] = "No-Muerto",
+    [1] = "Human",
+    [2] = "Orc",
+    [3] = "Dwarf",
+    [4] = "Night Elf",
+    [5] = "Undead",
     [6] = "Tauren",
-    [7] = "Gnomo",
+    [7] = "Gnome",
     [8] = "Troll",
     [9] = "Goblin",
-    [10] = "Elfo de Sangre",
+    [10] = "Blood Elf",
     [11] = "Draenei",
     [12] = "Fel Orc",
     [13] = "Naga",
@@ -59,19 +61,19 @@ NPCRaces = {
 }
 
 NPCGenders = {
-    [0] = "hombre",
-    [1] = "mujer"
+    [0] = "male",
+    [1] = "female"
 }
 
 NPCTypes = {
-    [0] = "Humanoide",
-    [1] = "No-Muerto",
+    [0] = "Humanoid",
+    [1] = "Undead",
     [2] = "Elemental",
-    [3] = "Bestia",
-    [4] = "Dragonante",
-    [5] = "Gigante",
-    [6] = "Demonio",
-    [7] = "Mecánico",
+    [3] = "Beast",
+    [4] = "Dragonkin",
+    [5] = "Giant",
+    [6] = "Demon",
+    [7] = "Mechanical",
     [8] = "Critter",
 }
 

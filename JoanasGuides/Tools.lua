@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 --[[ Creature Functions ]]
@@ -12,13 +14,6 @@ local dataMineText4 = _G[("%sDatamineTooltipTextLeft4"):format(addonName)]
 
 local creatureNameCache = { }
 
-local function IsCreatureLevelLine(text)
-	local levelPrefix = LEVEL
-	return type(levelPrefix) == "string"
-			and levelPrefix ~= ""
-			and string.sub(text, 1, string.len(levelPrefix)) == levelPrefix
-end
-
 function GetCreatureName(creatureID)
 	local creatureInfo = GetCreatureInfo(creatureID)
 	return creatureInfo and creatureInfo.name
@@ -30,33 +25,13 @@ function GetCreatureInfo(creatureID)
 		dataMineTooltip:SetOwner(UIParent, "ANCHOR_NONE")
 		dataMineTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(creatureID))
 		local creatureName = dataMineNameText:GetText()
-		local titleLine = dataMineText2:GetText()
-		local nameAccessible = canaccessvalue(creatureName)
-		local titleAccessible = canaccessvalue(titleLine)
-		local accessibleName
-		local accessibleTitle
-
-		if (nameAccessible and type(creatureName) == "string" and creatureName ~= "") then
-			accessibleName = creatureName
-		end
-		if (titleAccessible and type(titleLine) == "string" and titleLine ~= ""
-				and not IsCreatureLevelLine(titleLine)) then
-			accessibleTitle = titleLine
-		end
-
-		local localeNames = NPCNames and NPCNames[GetLocale()]
-		local fallback = localeNames and localeNames[creatureID]
-		local resolvedName = accessibleName or (fallback and fallback.name)
-		local resolvedTitle = accessibleTitle or (fallback and fallback.title)
-
-		if (resolvedName or resolvedTitle) then
+		if (creatureName and canaccessvalue(creatureName)) then
+			local line2 = dataMineText2:GetText()
 			creatureInfo = {
-				name = resolvedName,
-				title = resolvedTitle,
+				name = creatureName,
+				title = line2 and string.sub(line2,1,string.len(LEVEL)) ~= LEVEL and line2 or nil,
 			}
-			if (accessibleName and titleAccessible) then
-				creatureNameCache[creatureID] = creatureInfo
-			end
+			creatureNameCache[creatureID] = creatureInfo
 		end
 	end
 	return creatureInfo
@@ -173,13 +148,13 @@ end
 
 --[[ Quest Status Functions ]]
 function IsQuestAccepted(questID)
-	return C_QuestLog.IsOnQuest(questID) or C_QuestLog.IsQuestFlaggedCompleted(questID)
+	return C_QuestLog_IsOnQuest(questID) or C_QuestLog_IsQuestFlaggedCompleted(questID)
 end
 
 function IsQuestCompleted(questID)
-	if (C_QuestLog.IsQuestFlaggedCompleted(questID)) then return true end
-	if (not C_QuestLog.IsOnQuest(questID)) then return false end
-	local questObjectives = C_QuestLog.GetQuestObjectives(questID)
+	if (C_QuestLog_IsQuestFlaggedCompleted(questID)) then return true end
+	if (not C_QuestLog_IsOnQuest(questID)) then return false end
+	local questObjectives = C_QuestLog_GetQuestObjectives(questID)
 	local questIndex = 1
 	while(true) do
 		local questLogTitleText, _, _, _, _, isComplete, _, _questID, startEvent = GetQuestLogTitle(questIndex)
@@ -196,7 +171,7 @@ function IsQuestCompleted(questID)
 end
 
 function IsQuestTurnedIn(questID)
-	return C_QuestLog.IsQuestFlaggedCompleted(questID)
+	return C_QuestLog_IsQuestFlaggedCompleted(questID)
 end
 
 --[[ Spell Lookup Functions ]]
@@ -296,4 +271,9 @@ function CreateObjectivesList(task, questInfo)
 		end
 	end
 	return objectives
+end
+
+function GetDisplayVersion()
+	if (not addonVersion) then return "" end
+	return (addonVersion:gsub("%-.*", ""))
 end

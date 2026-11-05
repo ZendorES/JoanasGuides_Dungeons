@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local component = UI.CreateComponent("GuideTooltip")
@@ -7,7 +9,7 @@ local wowversion = select(7,GetBuildInfo())
 if (not wowversion) then wowversion = select(4, GetBuildInfo()) end
 
 function component.Init(components)
-    GuideTooltip = CreateFrame("GameTooltip", "JoanasGuideTooltip", UIParent, "GameTooltipTemplate")
+    GuideTooltip = CreateFrame("GameTooltip", addonName .. "GuideTooltip", UIParent, "GameTooltipTemplate")
     GuideTooltip:SetFrameStrata("TOOLTIP")
     GuideTooltip:Hide()
     GameTooltip_OnLoad(GuideTooltip);
@@ -42,6 +44,12 @@ function component.Init(components)
     GuideTooltip.NineSlice:SetAlpha(0.8)
 
     local OnModelLoaded = function(self)
+        self:SetPosition(0, 0, 0)
+        self:SetFacing(0)
+        self:SetPitch(0)
+        self:SetRoll(0)
+        self:SetCamDistanceScale(1)
+        self.spinning = false
         local modelFileID = self:GetModelFileID()
         local adjustment = ModelAdjustments[modelFileID]
         if (adjustment) then
