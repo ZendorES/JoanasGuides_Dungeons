@@ -14,7 +14,7 @@ local function addGuide(guideID, description, templateName, condition)
 end
 
 addGuide("DNG_HD1316RFC", "13-16 Sima Ígnea", "JoanasGuides-HD1316RFC", "HORDE")
-addGuide("DNG_HD1516ROL", "13-16 Ruinas de Lordaeron", "JoanasGuides-HD1516ROL", "HORDE")
+addGuide("DNG_HD1516ROL", "15-20 Ruinas de Lordaeron", "JoanasGuides-HD1516ROL", "HORDE")
 addGuide("DNG_AD1721DM", "17-21 Las Minas de la Muerte", "JoanasGuides-AD1721DM", "ALLIANCE")
 addGuide("DNG_AD1722WC", "17-22 Las Cuevas de los Lamentos", "JoanasGuides-AD1722WC", "ALLIANCE")
 addGuide("DNG_HD1722WC", "17-22 Las Cuevas de los Lamentos", "JoanasGuides-HD1722WC", "HORDE")
@@ -22,7 +22,7 @@ addGuide("DNG_HD1826SFK", "18-26 Castillo de Colmillo Oscuro", "JoanasGuides-HD1
 addGuide("DNG_HD2228BFD", "22-28 Cavernas de Brazanegra", "JoanasGuides-HD2228BFD", "HORDE")
 addGuide("DNG_AD2228BFD", "22-28 Cavernas de Brazanegra", "JoanasGuides-AD2228BFD", "ALLIANCE")
 addGuide("DNG_AD2329ST", "23-29 Las Mazmorras", "JoanasGuides-AD2329ST", "ALLIANCE")
-addGuide("DNG_HD2632ESW", "26-31 Excavación: Los Humedales", "JoanasGuides-HD2632ESW", "HORDE")
+addGuide("DNG_HD2632ESW", "26-32 Excavación: Los Humedales", "JoanasGuides-HD2632ESW", "HORDE")
 addGuide("DNG_AD2433RFK", "24-33 Horado Rajacieno", "JoanasGuides-AD2433RFK", "ALLIANCE")
 addGuide("DNG_HD2433RFK", "24-33 Horado Rajacieno", "JoanasGuides-HD2433RFK", "HORDE")
 addGuide("DNG_AD2534GM", "25-34 Gnomeregan", "JoanasGuides-AD2534GM", "ALLIANCE")
