@@ -209,6 +209,22 @@ local function ensureLoaded()
         source = "Bundled"
     end
 
+    if (not guideInfos) then
+        guideInfos = { }
+        guideInfoByID = { }
+        slotLookup = { }
+    end
+    for _, entry in ipairs(DungeonGuideInfos or { }) do
+        if (not guideInfoByID[entry.guideID]) then
+            table.insert(guideInfos, entry)
+            guideInfoByID[entry.guideID] = entry
+            slotLookup[entry.guideID] = {
+                prefix = "Dungeons",
+                templateName = entry.templateName,
+            }
+        end
+    end
+
     -- Verify signature in the background
     if (signedContent and signature) then
         startBackgroundVerify(signedContent, signature, source)
@@ -236,6 +252,7 @@ function CatalogService.GetGuideTemplate(guideID)
     ensureLoaded()
     local slot = slotLookup[guideID]
     if (not slot) then return nil end
+    if (slot.templateName) then return slot.templateName end
     return ("%s-%s%s"):format(addonName, slot.prefix, slot.slot)
 end
 
