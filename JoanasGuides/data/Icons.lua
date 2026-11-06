@@ -11,18 +11,18 @@ Icons = {
 		scale = 1,
 	},
 	["default"] = {
-		texture = I["x"]
+		texture = "Interface/AddOns/JoanasGuides/images/x"
 	},
 	["flightmaster"] = {
 		atlas = "FlightMaster",
 		scale = 0.9
 	},
 	["slay"] = {
-		texture = I["slay"],
+		texture = "Interface/AddOns/JoanasGuides/images/slay",
 		scale = 0.8
 	},
 	["minimaparrow"] = {
-		texture = I["MinimapArrow"],
+		texture = "Interface/AddOns/JoanasGuides/images/MinimapArrow",
 		scale = 1.3
 	},
 	["questnormal"] = {
@@ -34,7 +34,7 @@ Icons = {
 		scale = 0.85
 	},
 	["spiritres"] = {
-		texture = I["SpiritRes"],
+		texture = "Interface/AddOns/JoanasGuides/Images/SpiritRes",
 	},
 	["ui-checkbox-check"] = {
 		texture = "Interface/buttons/ui-checkbox-check",
@@ -62,5 +62,14 @@ Icons = {
 	["worldquest-icon-pvp-ffa"] = {
 		atlas = "worldquest-icon-pvp-ffa",
 		scale = 0.75
+	},
+	["coin-gold"] = {
+		texture = "Interface/MoneyFrame/UI-GoldIcon",
+	},
+	["coin-silver"] = {
+		texture = "Interface/MoneyFrame/UI-SilverIcon",
+	},
+	["coin-copper"] = {
+		texture = "Interface/MoneyFrame/UI-CopperIcon",
 	},
 }
