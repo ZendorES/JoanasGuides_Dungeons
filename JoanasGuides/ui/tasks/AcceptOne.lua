@@ -21,7 +21,7 @@ end
 function TaskType:RenderFunc(task, container)
 	local link = Hyperlinks.GetQuestHyperlink({ accept = task.acceptone[1] }, "accept")
 	container.text:SetShown(true)
-	container.text:SetText(L["Accept: |C%s%s|r"]:format(Color.QUEST_ACCEPT, link))
+	container.text:SetText(L["Acepta: |C%s%s|r"]:format(Color.QUEST_ACCEPT, link))
 end
 
 RegisterTaskType(TaskType)
