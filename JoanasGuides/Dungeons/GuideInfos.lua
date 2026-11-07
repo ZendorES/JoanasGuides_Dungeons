@@ -6,6 +6,7 @@ local function addGuide(guideID, description, templateName, condition)
 	table.insert(DungeonGuideInfos, {
 		description = description,
 		group = "Mazmorras",
+		flags = "B",
 		condition = condition,
 		moduleID = "Dungeons",
 		guideID = guideID,
