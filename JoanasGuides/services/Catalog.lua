@@ -256,6 +256,12 @@ function CatalogService.GetGuideTemplate(guideID)
     return ("%s-%s%s"):format(addonName, slot.prefix, slot.slot)
 end
 
+function CatalogService.IsExpired(guideID)
+    local info = guideInfoByID and guideInfoByID[guideID]
+    if (not info or not info.expires) then return false end
+    return GetServerTime() > info.expires
+end
+
 function CatalogService.GetDecryptKey(guideID)
     if (not catalogDecryptKey) then return nil end
     local info = guideInfoByID and guideInfoByID[guideID]
