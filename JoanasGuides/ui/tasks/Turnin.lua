@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local TaskType = Mixin({
@@ -16,10 +18,11 @@ function TaskType:RenderFunc(task, container)
 	local link = Hyperlinks.GetQuestHyperlink(task, "turnin")
 	local questID = task[self.type]
 	task.warn = nil
-	local objectives = C_QuestLog.GetQuestObjectives(questID)
+	local objectives = C_QuestLog_GetQuestObjectives(questID)
 	local questStatus = QuestStatus.GetQuestStatus(questID)
 	local hasObjectives = objectives and #objectives > 0
-	if ((questStatus == 0 or (questStatus < 2 and hasObjectives)) and not TurninOnlyQuests[questID]) then
+	task.suppressWarning = task.suppressWarning or TurninOnlyQuests[questID]
+	if ((questStatus == 0 or (questStatus < 2 and hasObjectives)) and not task.suppressWarning) then
 		if (questStatus == 0) then
 			task.warn = string.format("|c%sNo tienes esta misión.|r", Color.RED_TEXT)
 		else
@@ -44,7 +47,12 @@ function TaskType:RenderFunc(task, container)
 		task.iconOverride = nil
 	end
 	container.text:SetShown(true)
-	container.text:SetText(L["Entrega: |C%s%s|r"]:format(color, link))
+	if (task.fromnpc and not task.warn) then
+		local name = Hyperlinks.GetNPCHyperlink(task)
+		container.text:SetText(L["Speak to %s and turn in: |C%s%s|r"]:format(name, color, link))
+	else
+		container.text:SetText(L["Turn in: |C%s%s|r"]:format(color, link))
+	end
 end
 
 RegisterTaskType(TaskType)

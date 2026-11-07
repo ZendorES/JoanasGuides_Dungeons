@@ -975,4 +975,5 @@ GameObjectNames = {
 	[177964] = "Piedra de las profundidades",
 	[670427] = "Baúl de la celadora",
 	[656681] = "Escrito de Dalaran",
+	[1594] = "Estantería de Berard",
 }

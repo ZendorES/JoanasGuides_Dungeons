@@ -1,13 +1,6 @@
---[[
-Popup.lua
-Copyright (C) 2018-2023 TomCat's Tours
-All rights reserved.
-
-Non-exclusive license to this library has been provided to Joana for use within the JoanasGuides testing tool
-
-For more information, contact via email at tomcat@tomcatstours.com
-(or visit https://www.tomcatstours.com)
-]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 local popupFrame, OnMouseDown
 
@@ -34,6 +27,11 @@ local function Init()
     popupFrame.backdropBorderColor = GLUE_BACKDROP_BORDER_COLOR
     popupFrame:SetPoint("CENTER")
     popupFrame:SetFrameStrata("TOOLTIP")
+    popupFrame.header = popupFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlightLarge")
+    popupFrame.header:SetPoint("TOP", 0, -16)
+    popupFrame.header:SetWidth(380)
+    popupFrame.header:SetJustifyH("CENTER")
+    popupFrame.header:Hide()
     popupFrame.info = popupFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
     popupFrame.info:SetPoint("CENTER")
     popupFrame.editBox = CreateFrame("EditBox", nil, popupFrame, "InputBoxTemplate")
@@ -56,6 +54,14 @@ local function Init()
     popupFrame.button:SetScript("OnClick", function()
         popupFrame:Hide()
     end)
+    popupFrame.reloadButton = CreateFrame("Button", nil, popupFrame, "UIPanelButtonTemplate")
+    popupFrame.reloadButton:SetSize(96, 22)
+    popupFrame.reloadButton:SetPoint("BOTTOM", 0, 16)
+    popupFrame.reloadButton:SetText("Reload")
+    popupFrame.reloadButton:SetScript("OnClick", function()
+        ReloadUI()
+    end)
+    popupFrame.reloadButton:Hide()
     popupFrame:OnBackdropLoaded()
     popupFrame:Hide()
     popupFrame:RegisterEvent("GLOBAL_MOUSE_DOWN")
@@ -85,22 +91,61 @@ function OnMouseDown(self)
     end
 end
 
-function TogglePopup(text, caption, point, target, bounds)
+function TogglePopup(text, caption, point, target, bounds, headerText, useReload, buttonText)
     Init = Init() or nop
-    if (text == popupFrame.editBox.text and popupFrame:IsShown()) then
+    local toggleID = text or headerText
+    if (toggleID == popupFrame._toggleID and popupFrame:IsShown()) then
         HidePopup()
         return
     end
-    popupFrame.editBox.text = text
-    popupFrame.editBox:SetText(text)
-    popupFrame.info:SetText(caption)
+    popupFrame._toggleID = toggleID
+    if (useReload) then
+        popupFrame.button:Hide()
+        popupFrame.reloadButton:Show()
+    else
+        popupFrame.reloadButton:Hide()
+        popupFrame.button:SetText(buttonText or CLOSE)
+        popupFrame.button:Show()
+    end
+    popupFrame.info:ClearAllPoints()
+    popupFrame.editBox:ClearAllPoints()
+    if (text and text ~= "") then
+        popupFrame.editBox.text = text
+        popupFrame.editBox:SetText(text)
+        popupFrame.editBox:Show()
+        popupFrame.info:SetText(caption or "")
+        popupFrame.info:Show()
+    else
+        popupFrame.editBox.text = nil
+        popupFrame.editBox:Hide()
+        popupFrame.info:Hide()
+    end
+    if (headerText) then
+        popupFrame.header:SetText(headerText)
+        popupFrame.header:Show()
+        local headerHeight = popupFrame.header:GetStringHeight() or 14
+        if (text and text ~= "") then
+            popupFrame.editBox:SetPoint("TOP", 2.5, -(headerHeight + 24))
+            popupFrame.info:SetPoint("TOP", popupFrame.editBox, "BOTTOM", 0, -4)
+            popupFrame:SetHeight(headerHeight + 130)
+        else
+            popupFrame:SetHeight(headerHeight + 80)
+        end
+    else
+        popupFrame.header:Hide()
+        popupFrame.editBox:SetPoint("TOP", 2.5, -16)
+        popupFrame.info:SetPoint("CENTER")
+        popupFrame:SetSize(400, 116)
+    end
     popupFrame:ClearAllPoints()
     if (point) then
         popupFrame:SetPoint(unpack(point))
     else
         popupFrame:SetPoint("CENTER")
     end
-    popupFrame.editBox:HighlightText()
+    if (popupFrame.editBox:IsShown()) then
+        popupFrame.editBox:HighlightText()
+    end
     popupFrame.target = target
     popupFrame.bounds = bounds
     popupFrame:Show()
@@ -108,6 +153,7 @@ end
 
 function HidePopup()
     Init = Init() or nop
+    popupFrame._toggleID = nil
     popupFrame.editBox.text = nil
     popupFrame:Hide()
 end

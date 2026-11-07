@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local autoAdvanceEnabled, currentGuide, currentStep, hasNextStep, hasPreviousStep, manualOverrideEnabled,
@@ -100,6 +102,9 @@ function GuideNavigationService.Goto(guideID, stepID)
     if (guideID) then
         if (guideID == "return") then
             guideID = State.GetReturnToGuide(GUIDE_TYPE.LEVELING)
+        end
+        if (Brand.resolveGuideAlias) then
+            guideID = Brand.resolveGuideAlias(guideID) or guideID
         end
         GuideNavigationService.SetGuide(guideID)
         if (not stepID) then
@@ -205,6 +210,10 @@ function GuideNavigationService.SetAutoAdvanceEnabled(enabled)
     autoAdvanceEnabled = enabled
 end
 
+function GuideNavigationService.SetSeeking(enabled)
+    ConditionContext["SEEKING"] = enabled or nil
+end
+
 function GuideNavigationService.SetManualOverrideEnabled(enabled)
     manualOverrideEnabled = enabled
 end
@@ -219,6 +228,7 @@ function GuideNavigationService.SetGuide(guideID)
     end
     progressTrackersDirty = true
     currentStep = nil
+    LocationsService.SetStep(nil)
     LocationsService.SetGuide(currentGuide)
     MarkAllDirty()
 end

@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local SetChecked, SetOpts
@@ -26,8 +28,9 @@ function SetOpts(button, opts)
             button.minWidth = button.minWidth + 20
         end
         button:SetEnabled((not opts.isTitle and true or false) and opts.enabled ~= false)
-        if (opts.enabled == false) then
-            button:SetDisabledFontObject("GameFontDisableSmallLeft")
+        if (opts.isTitle) then
+            button:SetDisabledFontObject("GameFontNormalSmallLeft")
+        elseif (opts.enabled == false) then
             button:SetMotionScriptsWhileDisabled(true)
             button.checkbox:SetDesaturated(true)
         end
@@ -72,7 +75,7 @@ function CreateMenuButton(parent, opts)
     button:SetFontString(button.text)
     button:SetNormalFontObject("GameFontHighlightSmallLeft")
     button:SetHighlightFontObject("GameFontHighlightSmallLeft")
-    button:SetDisabledFontObject("GameFontNormalSmallLeft")
+    button:SetDisabledFontObject("GameFontDisableSmallLeft")
     button.arrow = button:CreateTexture(nil,"ARTWORK");
     button.arrow:SetTexture("Interface/ChatFrame/ChatFrameExpandArrow")
     button.arrow:SetSize(16, 16)

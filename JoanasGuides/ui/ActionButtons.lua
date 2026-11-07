@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local component = UI.CreateComponent("ActionButtons")
@@ -204,8 +206,10 @@ function component.GetTaskgroupsButtonStatus()
 	return status
 end
 
+local actionButtonNameTemplate = addonName .. "_ActionButton%d"
+
 function UI.GetNextActionButtonName()
-	return "JoanasGuides_ActionButton" .. (#actionButtons + 1)
+	return actionButtonNameTemplate:format(#actionButtons + 1)
 end
 
 UI.Add(component)

@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local next = 0
@@ -11,9 +13,8 @@ function CreateSlider(parent, opts)
     frame.text:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -opts.topPadding or 0)
     frame.text:SetFontObject(GameFontHighlightSmallLeft)
     frame.text:SetText(opts.text)
-    frame.text:SetWidth(frame.text:GetStringWidth())
     next = next + 1
-    local sliderFrameName = "JoanasGuidesSlider" .. next
+    local sliderFrameName = addonName .. "Slider" .. next
     local slider = CreateFrame("Slider", sliderFrameName, frame, "UISliderTemplate")
     slider:SetSize(144, 17)
     slider.Text = slider:CreateFontString(nil, "ARTWORK");
@@ -53,6 +54,10 @@ function CreateSlider(parent, opts)
     local value = opts.GetValue()
     slider:SetDisplayValue(value)
     slider.Text:SetText(opts.FormatValue(value))
-    slider:SetPoint("LEFT", frame.text, "RIGHT", 16, 0)
+    slider:SetPoint("LEFT", frame, "LEFT", 120, 0)
+    function frame:SetEnabled(enabled)
+        if (enabled) then slider:Enable() else slider:Disable() end
+        self:SetAlpha(enabled and 1.0 or 0.4)
+    end
     return frame
 end

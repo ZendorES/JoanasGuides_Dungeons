@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local conditionsChecked = 0
@@ -45,7 +47,7 @@ local function ValidateNode(guideID, step, taskGroupIdx, taskIdx)
 	end
 end
 
-function ValidateGuide()
+function ValidateGuide(guide)
 	if (State.IsDebugEnabled()) then
 		conditionsChecked = 0
 		completedsChecked = 0
@@ -55,7 +57,7 @@ function ValidateGuide()
 		guidesChecked = 0
 		errorsFound = 0
 	end
-	local currentGuide = GuideNavigationService.GetGuide();
+	local currentGuide = guide or GuideNavigationService.GetGuide();
 	if (currentGuide ~= nil) then
 		for _, step in ipairs(currentGuide) do
 			ValidateNode(currentGuide.id, step)
@@ -86,7 +88,7 @@ function ValidateAllGuides()
 	tasksChecked = 0
 	guidesChecked = 0
 	errorsFound = 0
-	for _, guideInfo in ipairs(GuideInfos) do
+	for _, guideInfo in ipairs(CatalogService.GetGuideInfos()) do
 		local debugEnabled = State.IsDebugEnabled()
 		if (debugEnabled) then State.SetDebugEnabled(false) end
 		Guide.SetGuide(guideInfo.guideID)

@@ -1,12 +1,14 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local component = UI.CreateComponent("MinimapButton")
 
 function component.Init(components)
 	local frame = CreateMinimapButton({
-		name = "JoanasGuides-MinimapButton",
-		iconTexture = "Interface\\AddOns\\JoanasGuides\\images\\JoanasGuidesPortrait",
+		name = addonName .. "-MinimapButton",
+		iconTexture = I[Brand.minimapIcon],
 		backgroundColor = { 0.0,0.0,0.0,1.0 },
 		handler_onclick = function()
 			State.SetGuideShown(true)
@@ -17,7 +19,7 @@ function component.Init(components)
 			GameTooltip:ClearLines()
 			GameTooltip:SetOwner(this, "ANCHOR_NONE")
 			GameTooltip:SetPoint("TOPRIGHT", this, "BOTTOMRIGHT", 0, 0)
-			GameTooltip:SetText(L["Joana's Guides"], 1, 1, 1)
+			GameTooltip:SetText(Brand.shortTitle, 1, 1, 1)
 			GameTooltip:Show()
 		end,
 		Hide = function()

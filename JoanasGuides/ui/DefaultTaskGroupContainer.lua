@@ -1,10 +1,12 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local component = UI.CreateComponent("DefaultTaskGroupContainer")
 
 local OOPS_MSG = "Oops! It seems that something should be displayed here.\n\n" ..
-	"Please report the issue to Joana's Guides Support and be sure to provide the following info:\n\n%s"
+	"Please report the issue support and be sure to provide the following info:\n\n%s"
 
 local guideFrame
 local headerFrame

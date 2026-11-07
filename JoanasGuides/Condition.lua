@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local context = { }
@@ -56,7 +58,7 @@ local OBJECTIVE = { }
 setmetatable(OBJECTIVE, {
 	__index = function(_, key)
 		local objectives = { }
-		local complete = C_QuestLog.IsQuestFlaggedCompleted(key)
+		local complete = C_QuestLog_IsQuestFlaggedCompleted(key)
 		local questObjectives = QuestStatus.GetQuestObjectives(key) or { }
 		for idx, objective in ipairs(questObjectives) do
 			objectives[idx] = complete or objective.finished
@@ -450,10 +452,13 @@ setmetatable(context, {
 })
 
 function Condition_ResetGuides()
-	for _, guideInfo in ipairs(GuideInfos) do
+	for _, guideInfo in ipairs(CatalogService.GetGuideInfos()) do
 		local moduleInfo = GuideModules.GetModule(guideInfo.moduleID)
 		if (moduleInfo and moduleInfo.installed and moduleInfo.compatible) then
 			context[guideInfo.guideID] = true
+			if (Brand.registerGuideAlias) then
+				Brand.registerGuideAlias(guideInfo.guideID, context)
+			end
 		end
 	end
 end
@@ -498,7 +503,6 @@ function Condition_OnAddonLoad()
 	end
 	context["MOPPHASE"] = 2
 	context[playerClass] = true
-	Condition_ResetGuides()
 	context["QUEST"] = QUEST
 	context["OBJECTIVE"] = OBJECTIVE
 	context["OBJECTIVECOUNT"] = OBJECTIVECOUNT

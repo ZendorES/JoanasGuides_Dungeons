@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local CreateLUTFromIDs, CreateLUTFromTitles, FindFirstEligible, GetQuestReward0, GetQuestReward1, OnEvent
@@ -38,11 +40,11 @@ function FindFirstEligible(acceptQuests, turninQuests, useIDs, questComplete)
                     end
                     for _, questID in ipairs(questIDs) do
                         if (questID
-                                and not C_QuestLog.IsQuestFlaggedCompleted(questID)
+                                and not C_QuestLog_IsQuestFlaggedCompleted(questID)
                                 and task.conditionPassed
                                 and (not task.completedPassed or task.optional)
                                 and task.auto ~= false) then
-                            local lut = (((task.accept or task.acceptone) and not C_QuestLog.IsOnQuest(questID)) and acceptQuests)
+                            local lut = (((task.accept or task.acceptone) and not C_QuestLog_IsOnQuest(questID)) and acceptQuests)
                                     or (task.turnin and (questComplete or IsQuestCompleted(questID)) and turninQuests)
                             if (lut) then
                                 local questKey = (useIDs and questID) or Names.GetQuestName(questID)

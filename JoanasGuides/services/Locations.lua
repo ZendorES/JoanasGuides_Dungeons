@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local activeLocation
@@ -49,6 +51,21 @@ end
 
 function IsValidCheckpoint(location)
     return Flags.HasFlag(location, "C") and not Flags.HasFlag(location, "H") and location.conditionPassed
+end
+
+local function PointInPolygon(polygon, px, py)
+    local inside = false
+    local n = #polygon
+    local j = n
+    for i = 1, n do
+        local xi, yi = polygon[i][1], polygon[i][2]
+        local xj, yj = polygon[j][1], polygon[j][2]
+        if ((yi > py) ~= (yj > py)) and (px < (xj - xi) * (py - yi) / (yj - yi) + xi) then
+            inside = not inside
+        end
+        j = i
+    end
+    return inside
 end
 
 LocationsService = { }
@@ -203,7 +220,11 @@ function LocationsService.UpdatePlayerPosition()
                 local distance = x and addon.GetDistanceInYards(x, y, location.worldX, location.worldY) or DISTANCE_MAX
                 local within
                 if (continentID == location.continentID) then
-                    within = distance <= location.radius
+                    if (location.polygon) then
+                        within = x and PointInPolygon(location.polygon, x, y) or false
+                    else
+                        within = distance <= location.radius
+                    end
                 else
                     within = false
                 end

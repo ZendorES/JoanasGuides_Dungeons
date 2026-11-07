@@ -1,7 +1,6 @@
 select(2, ...).SetupGlobalFacade()
 
-local AddonVersion = "3.03.01"
-local isBeta = false
+local AddonVersion = addonVersion
 local GuideVersion = "3.03.01"
 local GuideVersionMinimum = "3.03.01"
 
@@ -10,24 +9,21 @@ GuideModules = { }
 local modules
 
 local GuideModulesBase = {
-	Starter = {
-		name = "Starter",
-	},
-	Dungeons = {
-		name = "Dungeons",
-	},
-	SoD = {
-		name = "Season of Discovery",
-	},
-	Era = {
-		name = "Classic Era",
-	},
-	TBC = {
-		name = "The Burning Crusade",
-	},
-	Wrath = {
-		name = "Wrath of the Lich King",
-	},
+	--Starter = {
+	--	name = "Starter",
+	--},
+	--SoD = {
+	--	name = "Season of Discovery",
+	--},
+	--Era = {
+	--	name = "Classic Era",
+	--},
+	--TBC = {
+	--	name = "The Burning Crusade",
+	--},
+	--Wrath = {
+	--	name = "Wrath of the Lich King",
+	--},
 	--Cata = {
 	--	name = "Cataclysm",
 	--},
@@ -55,29 +51,44 @@ end
 local LatestAddonVersion = AddonVersion
 
 function GuideModules.GetAddonVersion()
-	if (GuideModules.IsBeta()) then
-		return AddonVersion .. "-beta"
-	end
 	return AddonVersion
 end
 
+local defaultModule = {
+	installed = true,
+	compatible = true,
+	version = "4.0.0",
+}
+
 function GuideModules.GetModule(moduleID)
-	return modules[moduleID]
+	return modules[moduleID] or defaultModule
 end
 
-function GuideModules.IsBeta()
-	return isBeta
+
+-- local expiration = 1793505600 -- Nov. 1 2026
+
+function GuideModules.IsExpired()
+	return false --GetServerTime() > expiration
+end
+
+local legacyModules = { "Era", "TBC", "Wrath" }
+local hasLegacy
+
+function GuideModules.HasLegacyModules()
+	if (hasLegacy == nil) then
+		hasLegacy = false
+		for _, module in ipairs(legacyModules) do
+			if (ReadHTMLTemplate(addonName .. "-Legacy-" .. module)) then
+				hasLegacy = true
+				break
+			end
+		end
+	end
+	return hasLegacy
 end
 
 function GuideModules.Reload()
 	modules = { }
-	local warnings = { }
-	local incompatible
-	-- December 15 2026 12:00 AM EDT
-	local expiration = 1797310800
-	local expired = time() > expiration
-	local expiringSoon = time() > expiration - (60 * 60 * 24 * 7)
-
 	for moduleName, moduleInfoBase in pairs(GuideModulesBase) do
 		modules[moduleName] = {
 			latest = moduleInfoBase.latest,
@@ -85,54 +96,13 @@ function GuideModules.Reload()
 			name = moduleInfoBase.name,
 		}
 		local moduleInfo = modules[moduleName]
-		local metadataHTML = CreateFrame("SimpleHTML", nil, nil, ("JoanasGuides-%s-metadata"):format(moduleName))
-		local regions = { metadataHTML:GetRegions() }
-		if (#regions > 0) then
-			local dataParts = { }
-			for _, region in ipairs(regions) do
-				table.insert(dataParts, RemoveSpaces(region:GetText()))
-			end
-			local metadata = loadstring(Base64.decode(table.concat(dataParts)))()
+		local metadata = LoadHTMLData(addonName .. "-" .. moduleName .. "-metadata")
+		if (metadata) then
 			moduleInfo.version = metadata.version
 			moduleInfo.requires = metadata.requires
 			moduleInfo.installed = true
 			moduleInfo.preferred = metadata.preferred
 		end
-		if (expired) then
-			moduleInfo.compatible = false
-		elseif (moduleInfo.installed) then
-			moduleInfo.compatible = (AddonVersion >= moduleInfo.requires and moduleInfo.version >= moduleInfo.minimum)
-			moduleInfo.current = (moduleInfo.version >= moduleInfo.minimum)
-			LatestAddonVersion = (moduleInfo.preferred > LatestAddonVersion) and moduleInfo.preferred or LatestAddonVersion
-			if (not moduleInfo.current) then
-				table.insert(warnings, ("%s"):format(moduleInfo.name))
-			end
-			if (AddonVersion < moduleInfo.requires) then
-				incompatible = true
-			end
-		end
-	end
-	if (expired) then
-		warnings = { }
-		table.insert(warnings, 1, "Time to update, adventurer!\n\nYour Joana's Guides addon and guide content are outdated. Get back into action by grabbing the latest updates from our website. Install them, then type /reload to keep enjoying Joana's Guides!")
-		CompatibilityWarnings.SetWarnings(warnings)
-	elseif (expiringSoon) then
-		warnings = { }
-		table.insert(warnings, 1, "Attention, fellow explorer!\n\nJust a heads-up: Your Joana's Guides addon and guide content are set to become outdated soon. Fear not, an update is ready! Visit our website, grab the latest addon and guide content, and keep your adventure alive. Don't let the expiration date catch you off guard.")
-		CompatibilityWarnings.SetWarnings(warnings)
-	elseif (#warnings > 0) then
-		if (incompatible) then
-			warnings = { }
-			table.insert(warnings, 1, "Oops! It looks like the addon and guide content aren't quite in sync. To get things back on track, just update the addon and guide content to the latest versions. Afterward, a quick /reload will do the trick!");
-		else
-			table.insert(warnings, 1, " ")
-			table.insert(warnings, 1, "Outdated guides:")
-			table.insert(warnings, 1, " ")
-			table.insert(warnings, 1, "Oops! It looks like you've updated the addon but haven't updated some of your guides content yet. Get back into action by grabbing the latest updates from our website. Install them, then type /reload to keep enjoying Joana's Guides!")
-		end
-		CompatibilityWarnings.SetWarnings(warnings)
-	else
-		CompatibilityWarnings.SetWarnings(nil)
 	end
 	UI.MarkDirty()
 	Condition_ResetGuides()

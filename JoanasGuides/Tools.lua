@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 --[[ Creature Functions ]]
@@ -173,13 +175,13 @@ end
 
 --[[ Quest Status Functions ]]
 function IsQuestAccepted(questID)
-	return C_QuestLog.IsOnQuest(questID) or C_QuestLog.IsQuestFlaggedCompleted(questID)
+	return C_QuestLog_IsOnQuest(questID) or C_QuestLog_IsQuestFlaggedCompleted(questID)
 end
 
 function IsQuestCompleted(questID)
-	if (C_QuestLog.IsQuestFlaggedCompleted(questID)) then return true end
-	if (not C_QuestLog.IsOnQuest(questID)) then return false end
-	local questObjectives = C_QuestLog.GetQuestObjectives(questID)
+	if (C_QuestLog_IsQuestFlaggedCompleted(questID)) then return true end
+	if (not C_QuestLog_IsOnQuest(questID)) then return false end
+	local questObjectives = C_QuestLog_GetQuestObjectives(questID)
 	local questIndex = 1
 	while(true) do
 		local questLogTitleText, _, _, _, _, isComplete, _, _questID, startEvent = GetQuestLogTitle(questIndex)
@@ -196,7 +198,7 @@ function IsQuestCompleted(questID)
 end
 
 function IsQuestTurnedIn(questID)
-	return C_QuestLog.IsQuestFlaggedCompleted(questID)
+	return C_QuestLog_IsQuestFlaggedCompleted(questID)
 end
 
 --[[ Spell Lookup Functions ]]
@@ -296,4 +298,9 @@ function CreateObjectivesList(task, questInfo)
 		end
 	end
 	return objectives
+end
+
+function GetDisplayVersion()
+	if (not addonVersion) then return "" end
+	return (addonVersion:gsub("%-.*", ""))
 end

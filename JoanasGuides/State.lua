@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 -- backwards compatibility
@@ -38,6 +40,14 @@ end
 
 function State.GetCustomVariables()
 	return SavedVariablesPerCharacter.custom
+end
+
+function State.GetArrowScale()
+	return SavedVariables.arrowScale or 1.0
+end
+
+function State.GetArrowTextScale()
+	return SavedVariables.arrowTextScale or 1.0
 end
 
 function State.GetGuideScale()
@@ -86,7 +96,7 @@ end
 function State.Init()
 	_G[SavedVariablesName] = DefaultEmptyTable(_G[SavedVariablesName])
 	SavedVariables = _G[SavedVariablesName]
-	SavedVariables.scale = DefaultValue(SavedVariables.scale, 1.0)
+	SavedVariables.scale = DefaultValue(SavedVariables.scale, 1.2)
 	SavedVariables.enableStepID = DefaultTrue(SavedVariables.enableStepID)
 	SavedVariables.objectiveCompletionSound = DefaultTrue(SavedVariables.objectiveCompletionSound)
 	SavedVariables.autoquests = DefaultTrue(SavedVariables.autoquests)
@@ -155,6 +165,20 @@ end
 
 function State.IsMapPingAnimationEnabled()
 	return DefaultValue(SavedVariables.mapPingAnimationEnabled, true)
+end
+
+function State.IsDevEnabled()
+	return SavedVariables.dev or false
+end
+
+function State.IsScreenArrowEnabled()
+	if (SavedVariables.screenArrowEnabled == nil) then return true end
+	return SavedVariables.screenArrowEnabled
+end
+
+function State.IsTomTomSupportEnabled()
+	if (SavedVariables.tomtomSupportEnabled == nil) then return true end
+	return SavedVariables.tomtomSupportEnabled
 end
 
 function State.IsStepIDEnabled()
@@ -226,6 +250,20 @@ function State.SetGuideShown(shown)
 	end
 end
 
+function State.SetDevEnabled(enabled)
+	SavedVariables.dev = enabled or nil
+end
+
+function State.SetArrowScale(scale)
+	SavedVariables.arrowScale = scale
+	UI.MarkDirty()
+end
+
+function State.SetArrowTextScale(scale)
+	SavedVariables.arrowTextScale = scale
+	UI.MarkDirty()
+end
+
 function State.SetGuideScale(scale)
 	SavedVariables.scale = scale
 	UI.MarkDirty()
@@ -260,6 +298,16 @@ end
 
 function State.SetMapPingAnimationEnabled(enabled)
 	SavedVariables.mapPingAnimationEnabled = enabled
+	UI.MarkDirty()
+end
+
+function State.SetScreenArrowEnabled(enabled)
+	SavedVariables.screenArrowEnabled = enabled
+	UI.MarkDirty()
+end
+
+function State.SetTomTomSupportEnabled(enabled)
+	SavedVariables.tomtomSupportEnabled = enabled
 	UI.MarkDirty()
 end
 

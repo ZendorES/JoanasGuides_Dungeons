@@ -1,7 +1,10 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
-local isHardcoreServer = C_Seasons and (C_Seasons.GetActiveSeason() == Enum.SeasonID.Hardcore or C_Seasons.GetActiveSeason() == Enum.SeasonID.FreshHardcore)
+local gameVersion = select(4, GetBuildInfo())
+local isHardcoreServer = gameVersion < 16000 and C_Seasons and (C_Seasons.GetActiveSeason() == Enum.SeasonID.Hardcore or C_Seasons.GetActiveSeason() == Enum.SeasonID.FreshHardcore)
 
 HardcoreService = { }
 

@@ -11,18 +11,18 @@ Icons = {
 		scale = 1,
 	},
 	["default"] = {
-		texture = "Interface/AddOns/JoanasGuides/images/x"
+		texture = I["x"]
 	},
 	["flightmaster"] = {
 		atlas = "FlightMaster",
 		scale = 0.9
 	},
 	["slay"] = {
-		texture = "Interface/AddOns/JoanasGuides/images/slay",
+		texture = I["slay"],
 		scale = 0.8
 	},
 	["minimaparrow"] = {
-		texture = "Interface/AddOns/JoanasGuides/images/MinimapArrow",
+		texture = I["MinimapArrow"],
 		scale = 1.3
 	},
 	["questnormal"] = {
@@ -34,7 +34,7 @@ Icons = {
 		scale = 0.85
 	},
 	["spiritres"] = {
-		texture = "Interface/AddOns/JoanasGuides/Images/SpiritRes",
+		texture = I["SpiritRes"],
 	},
 	["ui-checkbox-check"] = {
 		texture = "Interface/buttons/ui-checkbox-check",

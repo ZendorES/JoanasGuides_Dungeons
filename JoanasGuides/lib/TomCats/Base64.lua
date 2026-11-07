@@ -1,11 +1,6 @@
---[[
-Base64.lua
-Copyright (C) 2018-2023 TomCat's Tours
-All rights reserved.
-
-For more information, contact via email at tomcat@tomcatstours.com
-(or visit https://www.tomcatstours.com)
-]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 Base64 = { }
