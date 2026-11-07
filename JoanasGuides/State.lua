@@ -152,11 +152,11 @@ function State.IsHardcoreEnabled()
 end
 
 function State.IsHiddenInInstances()
-	return DefaultValue(SavedVariables.hiddenInInstances, false)
+	return DefaultValue(SavedVariables.hiddenInInstances, true)
 end
 
 function State.IsInvertedModeEnabled()
-	return DefaultValue(SavedVariables.invertedMode, true)
+	return DefaultValue(SavedVariables.invertedMode,false)
 end
 
 function State.IsKeybindDisplayEnabled()
