@@ -975,4 +975,5 @@ GameObjectNames = {
 	[177964] = "Fathom Stone",
 	[670427] = "Warden's Footlocker",
 	[656681] = "Dalaran Tome",
+	[1594] = "Berard's Bookshelf"
 }

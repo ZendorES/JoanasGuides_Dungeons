@@ -1,11 +1,6 @@
---[[
-MinimapButton.lua
-Copyright (C) 2018-2023 TomCat's Tours
-All rights reserved.
-
-For more information, contact via email at tomcat@tomcatstours.com
-(or visit https://www.tomcatstours.com)
-]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local CreateFrame = CreateFrame
@@ -187,7 +182,7 @@ function CreateMinimapButton(buttonInfo)
 		seqNum = seqNum + 1
 	end
 	--noinspection UnusedDef
-	local frame = CreateFrame("Button", name, Minimap, "JoanasGuides-MinimapButtonTemplate")
+	local frame = CreateFrame("Button", name, Minimap, addonName .. "-MiniMapButtonTemplate")
 	MinimapButtonOnload(frame)
 	frame:SetFrameLevel(13)
 	if (buttonInfo.backgroundColor) then

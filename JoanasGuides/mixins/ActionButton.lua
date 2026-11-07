@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local CalculateYOffset, OnEnter, OnLeave, OnDragStart, OnEvent
@@ -26,13 +28,13 @@ popupDialog = {
     run = function(itemID, itemName)
         popupDialog.text = "¿Estás seguro de que quieres eliminar " .. (itemName or "the item") .. "?"
         popupDialog.itemID = itemID
-        StaticPopup_Show("JoanasGuides_CONFIRM_DESTROY_ITEM")
+        StaticPopup_Show(addonName .. "_CONFIRM_DESTROY_ITEM")
     end
 }
 
 setmetatable(popupDialog, popupDialogMetatable)
 
-local destroyItemMacroTemplate = "/run StaticPopupDialogs.JoanasGuides_CONFIRM_DESTROY_ITEM.run(%s, '%s')"
+local destroyItemMacroTemplate = "/run StaticPopupDialogs." .. addonName .. "_CONFIRM_DESTROY_ITEM.run(%s, '%s')"
 
 local targetSingleMacroTemplate1Mark = "/cleartarget [exists]\n/tar %s\n/cleartarget [dead]\n/tm %s"
 local targetSingleMacroTemplate2Mark = "/cleartarget [exists]\n/tar [noexists] %s\n/cleartarget [dead]\n/tm %s"
@@ -43,7 +45,7 @@ local targetSingleMacroTemplate2 = "/tar [noexists] %s\n/cleartarget [dead]"
 local targetSingleMacroTemplateAllowDead1 = "/tar %s"
 local targetSingleMacroTemplateAllowDead2 = "/tar [noexists] %s"
 
-StaticPopupDialogs["JoanasGuides_CONFIRM_DESTROY_ITEM"] = popupDialog
+StaticPopupDialogs[addonName .. "_CONFIRM_DESTROY_ITEM"] = popupDialog
 
 function CalculateYOffset(fromY, button)
     --todo: Check for nil safety - this should never be called if it's not going to be visible and has a parent
@@ -328,7 +330,7 @@ function ActionButtonMixin:SetButtonRef(buttonRef)
 --            self:SetIconTexture(254883)
             self:SetIconTexture(I.inv_sigil_hodir)
         else
-            self:SetIconTexture(132222)
+            self:SetIconTexture(132177)
         end
         --self:SetIconTexture(132212)
         --self:SetIconTexture(236179)

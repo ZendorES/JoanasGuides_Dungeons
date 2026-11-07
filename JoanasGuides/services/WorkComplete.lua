@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local isDirty
@@ -24,7 +26,7 @@ function WorkCompleteService.Update()
 					else
 						local questID = task.complete or task.startwork
 						if (questID) then
-							local objectives = C_QuestLog.GetQuestObjectives(questID)
+							local objectives = C_QuestLog_GetQuestObjectives(questID)
 							for idx in pairs(val) do
 								if (objectives and objectives[idx] and objectives[idx].finished) then
 									playSound = true
@@ -52,7 +54,7 @@ function WorkCompleteService.Update()
 							local questID = task.complete or task.startwork
 							if (questID) then
 								tracker[task] = { }
-								local objectives = C_QuestLog.GetQuestObjectives(questID)
+								local objectives = C_QuestLog_GetQuestObjectives(questID)
 								if (objectives and #objectives > 0) then
 									for idx, objective in ipairs(objectives) do
 										if (not objective.finished) then

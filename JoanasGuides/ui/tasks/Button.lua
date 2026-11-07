@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local TaskType = Mixin({
@@ -36,9 +38,15 @@ function TaskType:RenderFunc(task, container)
 			end
 			MarkAllDirty()
 		end
-		if (task.guide or task.goto) then
+		local guide = task.guide
+		local stepID = task["goto"]
+		if (stepID == "prereqs") then
+			guide = task.parent._prereqGuide
+			stepID = task.parent._prereqStep
+		end
+		if (guide or stepID) then
 			GuideNavigationService.SetManualOverrideEnabled(false)
-			GuideNavigationService.Goto(task.guide, task.goto)
+			GuideNavigationService.Goto(guide, stepID)
 		end
 	end)
 end

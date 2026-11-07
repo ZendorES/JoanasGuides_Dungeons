@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 QuestStatus = { }
@@ -23,7 +25,7 @@ local function OnUpdate(_, elapsed)
 			return
 		end
 		for questID in pairs(queue) do
-			local questObjectives = C_QuestLog.GetQuestObjectives(questID)
+			local questObjectives = C_QuestLog_GetQuestObjectives(questID)
 			if (questObjectives ~= nil) then
 				queue[questID] = nil
 				UI.MarkDirty()
@@ -33,7 +35,7 @@ local function OnUpdate(_, elapsed)
 end
 
 function QuestStatus.GetQuestObjectives(questID)
-	local questObjectives = C_QuestLog.GetQuestObjectives(questID)
+	local questObjectives = C_QuestLog_GetQuestObjectives(questID)
 	if (questObjectives == nil) then
 		queue[questID] = true
 		interval = minInterval
@@ -48,8 +50,8 @@ function QuestStatus.GetQuestStatus(questID)
 			return questStatus
 		end
 	end
-	if (C_QuestLog.IsQuestFlaggedCompleted(questID)) then return TURNEDIN end
-	if (not C_QuestLog.IsOnQuest(questID)) then return NONE end
+	if (C_QuestLog_IsQuestFlaggedCompleted(questID)) then return TURNEDIN end
+	if (not C_QuestLog_IsOnQuest(questID)) then return NONE end
 	local questObjectives = QuestStatus.GetQuestObjectives(questID)
 	local questIndex = 1
 	while(true) do

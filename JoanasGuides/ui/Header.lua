@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local component = UI.CreateComponent("Header")
@@ -6,9 +8,9 @@ local hc
 
 local function RefreshIcon()
 	if (hc) then
-		component.frame.Icon:SetTexture(I["JoanasGuidesHardcorePortrait"])
+		component.frame.Icon:SetTexture(I[Brand.headerLogoHC])
 	else
-		component.frame.Icon:SetTexture(I["JoanasGuidesPortrait"])
+		component.frame.Icon:SetTexture(I[Brand.headerLogo])
 	end
 end
 
@@ -28,10 +30,13 @@ function component.Init(components)
 	frame.IconBorder:SetAtlas("auctionhouse-itemicon-border-artifact")
 	frame.IconBorder:SetSize(56, 56)
 	frame.IconBorder:SetPoint("LEFT", -32, 3)
+	if (Brand.headerIconBorderHidden) then
+		frame.IconBorder:Hide()
+	end
 	frame.Icon = frame:CreateTexture(nil, "ARTWORK")
 	RefreshIcon()
-	frame.Icon:SetSize(36, 36)
-	frame.Icon:SetPoint("CENTER", frame.IconBorder)
+	frame.Icon:SetSize(Brand.headerIconSize or 36, Brand.headerIconSize or 36)
+	frame.Icon:SetPoint("CENTER", frame.IconBorder, "CENTER", Brand.headerIconOffsetX or 0, 0)
 end
 
 function component.Update()

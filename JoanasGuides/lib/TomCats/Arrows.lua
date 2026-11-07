@@ -1,15 +1,8 @@
---[[
-Arrows.lua
-Copyright (C) 2018-2023 TomCat's Tours
-All rights reserved.
-
-For more information, contact via email at tomcat@tomcatstours.com
-(or visit https://www.tomcatstours.com)
-]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
--- Proof of concept: large on-screen directional arrow
-local ENABLE_SCREEN_ARROW = false
 
 local minimap_size = {
     indoor = {
@@ -45,105 +38,206 @@ local Mixin = Mixin
 local arrows = { }
 local active = false
 
--- Screen arrow state
 local screenArrow
-local screenArrowActive = false
+local currentArrowScale, currentArrowTextScale
+local arrowLabelFont
 
-local SCREEN_ARROW_PROXIMITY = 1  -- yards
+local function StripColorCodes(text)
+    if (not text) then return text end
+    return text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
+end
+
+local SPRITE_COLS = 9
+local SPRITE_ROWS = 12
+local SPRITE_FRAMES = 108
+local TILE_W = 1 / SPRITE_COLS
+local TILE_H = 1 / SPRITE_ROWS
+
+local function SetArrowDirection(texture, rads)
+    local normalized = (rads % (2 * math.pi)) / (2 * math.pi)
+    local frame = math.floor(normalized * SPRITE_FRAMES + 0.5) % SPRITE_FRAMES
+    local col = frame % SPRITE_COLS
+    local row = math.floor(frame / SPRITE_COLS)
+    texture:SetTexCoord(
+        col * TILE_W, (col + 1) * TILE_W,
+        row * TILE_H, (row + 1) * TILE_H
+    )
+    local behind = math.abs(((rads + math.pi) % (2 * math.pi)) - math.pi) / math.pi
+    local r = behind
+    local g = 1 - behind
+    texture:SetVertexColor(r, g, 0, 1)
+end
 
 local function CreateScreenArrow()
-    local f = CreateFrame("Frame", "JoanasScreenArrow", UIParent)
-    f:SetSize(160, 160)
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, 150)
-    f:SetFrameStrata("HIGH")
-    f:SetFrameLevel(10)
-    f:SetMovable(true)
+    arrowLabelFont = CreateFont(addonName .. "ArrowLabelFont")
+    arrowLabelFont:CopyFontObject(GameFontWhiteSmall)
+    arrowLabelFont:SetShadowOffset(0, 0)
+    -- Container: handles positioning and dragging, never scaled
+    local container = CreateFrame("Frame", nil, UIParent)
+    container:SetSize(1, 1)
+    local arrowLocation = SavedVariables.HUDArrowLocation
+    if (arrowLocation) then
+        arrowLocation[2] = nil
+        container:SetPoint(unpack(arrowLocation))
+    else
+        container:SetPoint("CENTER", UIParent, "CENTER", 300, 0)
+    end
+    container:SetFrameStrata("HIGH")
+    container:SetFrameLevel(10)
+    container:SetMovable(true)
+    container:SetClampedToScreen(true)
+    -- Arrow: handles visuals and scale, anchored to container center
+    local f = CreateFrame("Frame", addonName .. "ScreenArrow", container)
+    f:SetSize(128, 128)
+    f:SetPoint("CENTER", container, "CENTER")
     f:EnableMouse(true)
     f:RegisterForDrag("LeftButton")
-    f:SetScript("OnDragStart", f.StartMoving)
-    f:SetScript("OnDragStop", f.StopMovingOrSizing)
-    f:SetClampedToScreen(true)
-
-    -- Arrow texture
+    f:SetScript("OnDragStart", function() container:StartMoving() end)
+    f:SetScript("OnDragStop", function()
+        container:StopMovingOrSizing()
+        SavedVariables.HUDArrowLocation = { container:GetPoint() }
+    end)
+    f.container = container
     local arrow = f:CreateTexture(nil, "OVERLAY")
-    arrow:SetTexture(I["Arrow-Mask"])
-    arrow:SetSize(160, 160)
+    arrow:SetTexture(I["arrow-atlas.png"])
     arrow:SetAllPoints(f)
-    arrow:SetVertexColor(0, 0.8, 0, 1)
     f.arrowTexture = arrow
-
-    -- Ping textures (mirroring minimap ping style)
-    local pingFrame = CreateFrame("Frame", nil, f)
-    pingFrame:SetSize(160, 160)
-    pingFrame:SetPoint("CENTER")
-    pingFrame:Hide()
-    pingFrame.centerRing = pingFrame:CreateTexture(nil, "OVERLAY")
-    pingFrame.centerRing:SetTexture("Interface\\minimap\\UI-Minimap-Ping-Center")
-    pingFrame.centerRing:SetSize(80, 80)
-    pingFrame.centerRing:SetPoint("CENTER")
-    pingFrame.rotatingRing = pingFrame:CreateTexture(nil, "OVERLAY")
-    pingFrame.rotatingRing:SetTexture("Interface\\minimap\\UI-Minimap-Ping-Rotate")
-    pingFrame.rotatingRing:SetSize(120, 120)
-    pingFrame.rotatingRing:SetPoint("CENTER")
-    pingFrame.expandingRing = pingFrame:CreateTexture(nil, "OVERLAY")
-    pingFrame.expandingRing:SetTexture("Interface\\minimap\\UI-Minimap-Ping-Expand")
-    pingFrame.expandingRing:SetSize(80, 80)
-    pingFrame.expandingRing:SetPoint("CENTER")
-    pingFrame.animation = pingFrame:CreateAnimationGroup()
-    pingFrame.animation:SetLooping("REPEAT")
-    local rotationAnim = pingFrame.animation:CreateAnimation("Rotation")
-    rotationAnim:SetTarget(pingFrame.rotatingRing)
-    rotationAnim:SetDegrees(-180)
-    rotationAnim:SetDuration(0.8)
-    rotationAnim:SetOrder(1)
-    local scaleAnim = pingFrame.animation:CreateAnimation("Scale")
-    scaleAnim:SetTarget(pingFrame.expandingRing)
-    if (scaleAnim.SetFromScale) then
-        scaleAnim:SetFromScale(0.1, 0.1)
-        scaleAnim:SetToScale(1.5, 1.5)
-    else
-        scaleAnim:SetScaleFrom(0.1, 0.1)
-        scaleAnim:SetScaleTo(1.5, 1.5)
+    local spinFrame = CreateFrame("Frame", nil, f)
+    spinFrame:SetAllPoints(f)
+    spinFrame:Hide()
+    spinFrame.texture = spinFrame:CreateTexture(nil, "OVERLAY")
+    spinFrame.texture:SetTexture(I["arrow-spin-atlas.png"])
+    spinFrame.texture:SetAllPoints(spinFrame)
+    spinFrame.texture:SetVertexColor(0, 1, 0, 1)
+    spinFrame.spinIndex = 0
+    spinFrame.spinSpeed = 1.5
+    spinFrame.elapsed = 0
+    spinFrame:SetScript("OnUpdate", function(self, elapsed)
+        self.elapsed = self.elapsed + elapsed
+        local progress = (self.elapsed / self.spinSpeed) % 1
+        local frame = math.floor(progress * SPRITE_FRAMES) % SPRITE_FRAMES
+        local col = frame % SPRITE_COLS
+        local row = math.floor(frame / SPRITE_COLS)
+        self.texture:SetTexCoord(
+            col * TILE_W, (col + 1) * TILE_W,
+            row * TILE_H, (row + 1) * TILE_H
+        )
+    end)
+    f.pingFrame = spinFrame
+    local shadowContainer = CreateFrame("Frame", nil, f)
+    shadowContainer:SetAllPoints(f)
+    shadowContainer:SetAlpha(0.6)
+    local d = 2
+    local shadowOffsets = {
+        {0, d}, {d, d}, {d, 0}, {d, -d},
+        {0, -d}, {-d, -d}, {-d, 0}, {-d, d}
+    }
+    shadowContainer.labels = {}
+    for i, offset in ipairs(shadowOffsets) do
+        local shadow = shadowContainer:CreateFontString(nil, "ARTWORK", addonName .. "ArrowLabelFont")
+        shadow:SetPoint("TOP", f, "BOTTOM", offset[1], 8 + offset[2])
+        shadow:SetTextColor(0, 0, 0, 1)
+        shadowContainer.labels[i] = shadow
     end
-    scaleAnim:SetDuration(0.8)
-    scaleAnim:SetOrder(1)
-    f.pingFrame = pingFrame
-
-    f:Hide()
+    f.shadowContainer = shadowContainer
+    local labelContainer = CreateFrame("Frame", nil, f)
+    labelContainer:SetAllPoints(f)
+    labelContainer:SetFrameLevel(shadowContainer:GetFrameLevel() + 1)
+    local label = labelContainer:CreateFontString(nil, "OVERLAY", addonName .. "ArrowLabelFont")
+    label:SetPoint("TOP", f, "BOTTOM", 0, 8)
+    label:SetTextColor(1, 1, 1, 1)
+    f.label = label
+    -- Distance label with same shadow/outline technique
+    local distShadowContainer = CreateFrame("Frame", nil, f)
+    distShadowContainer:SetAllPoints(f)
+    distShadowContainer:SetAlpha(0.6)
+    distShadowContainer.labels = {}
+    for i, offset in ipairs(shadowOffsets) do
+        local shadow = distShadowContainer:CreateFontString(nil, "ARTWORK", addonName .. "ArrowLabelFont")
+        shadow:SetPoint("TOP", label, "BOTTOM", offset[1], offset[2])
+        shadow:SetTextColor(0, 0, 0, 1)
+        distShadowContainer.labels[i] = shadow
+    end
+    f.distShadowContainer = distShadowContainer
+    local distLabelContainer = CreateFrame("Frame", nil, f)
+    distLabelContainer:SetAllPoints(f)
+    distLabelContainer:SetFrameLevel(distShadowContainer:GetFrameLevel() + 1)
+    local distLabel = distLabelContainer:CreateFontString(nil, "OVERLAY", addonName .. "ArrowLabelFont")
+    distLabel:SetPoint("TOP", label, "BOTTOM", 0, 0)
+    distLabel:SetTextColor(1, 0.82, 0, 1)
+    f.distLabel = distLabel
+    currentArrowScale = nil
+    currentArrowTextScale = nil
+    container:Hide()
     return f
 end
 
-local function UpdateScreenArrow(rads, distance, enablePingAnimation)
-    if (not ENABLE_SCREEN_ARROW) then return end
+local function UpdateScreenArrow(rads, distance, label)
+    if (not State.IsScreenArrowEnabled() or (TomTom and State.IsTomTomSupportEnabled())) then
+        if (screenArrow and screenArrow.container:IsShown()) then
+            screenArrow.pingFrame:Hide()
+            screenArrow.container:Hide()
+        end
+        return
+    end
     if (not screenArrow) then
         screenArrow = CreateScreenArrow()
     end
+    local arrowScale = State.GetArrowScale()
+    local arrowTextScale = State.GetArrowTextScale()
+    if (arrowScale ~= currentArrowScale or arrowTextScale ~= currentArrowTextScale) then
+        if (arrowScale ~= currentArrowScale) then
+            screenArrow:SetScale(0.6 * arrowScale)
+        end
+        currentArrowScale = arrowScale
+        currentArrowTextScale = arrowTextScale
+        local fontFile, fontSize = GameFontWhiteSmall:GetFont()
+        arrowLabelFont:SetFont(fontFile, fontSize * 1.8 * arrowTextScale, "")
+    end
     if (rads) then
-        if (distance and distance <= SCREEN_ARROW_PROXIMITY) then
-            -- Show ping, hide arrow
+        if (distance and distance <= 1.5) then
             if (screenArrow.arrowTexture:IsShown()) then screenArrow.arrowTexture:Hide() end
             if (not screenArrow.pingFrame:IsShown()) then
+                screenArrow.pingFrame.elapsed = 0
                 screenArrow.pingFrame:Show()
-                if (enablePingAnimation) then
-                    screenArrow.pingFrame.animation:Play()
-                end
             end
         else
-            -- Show arrow, hide ping
             if (screenArrow.pingFrame:IsShown()) then
-                screenArrow.pingFrame.animation:Stop()
                 screenArrow.pingFrame:Hide()
             end
             if (not screenArrow.arrowTexture:IsShown()) then screenArrow.arrowTexture:Show() end
-            screenArrow.arrowTexture:SetRotation(rads)
+            SetArrowDirection(screenArrow.arrowTexture, rads)
         end
-        if (not screenArrow:IsShown()) then screenArrow:Show() end
+        local shadowText = StripColorCodes(label or "")
+        if (shadowText ~= screenArrow.lastLabelText) then
+            screenArrow.lastLabelText = shadowText
+            for _, shadow in ipairs(screenArrow.shadowContainer.labels) do
+                shadow:SetText(shadowText)
+            end
+            screenArrow.label:SetText(label or "")
+        end
+        if (distance) then
+            local distText = math.floor(distance + 0.5) .. " yards"
+            if (distText ~= screenArrow.lastDistText) then
+                screenArrow.lastDistText = distText
+                for _, shadow in ipairs(screenArrow.distShadowContainer.labels) do
+                    shadow:SetText(distText)
+                end
+                screenArrow.distLabel:SetText(distText)
+            end
+        end
+        if (not screenArrow.container:IsShown()) then screenArrow.container:Show() end
     else
         if (screenArrow.pingFrame:IsShown()) then
-            screenArrow.pingFrame.animation:Stop()
             screenArrow.pingFrame:Hide()
         end
-        if (screenArrow:IsShown()) then screenArrow:Hide() end
+        if (screenArrow.container:IsShown()) then
+            for _, shadow in ipairs(screenArrow.distShadowContainer.labels) do
+                shadow:SetText("")
+            end
+            screenArrow.distLabel:SetText("")
+            screenArrow.container:Hide()
+        end
     end
 end
 
@@ -160,7 +254,7 @@ local function OnUpdate()
                         arrow.worldTargetY,
                         unitPositionX,
                         unitPositionY)
-                UpdateScreenArrow(rawRads - playerFacing, distance, arrow.enablePingAnimation)
+                UpdateScreenArrow(rawRads - playerFacing, distance, arrow.screenLabel)
                 local r = GetViewRadius()
                 if (distance > r * 0.75) then
                     if (not arrow:IsShown()) then arrow:Show() end
@@ -274,6 +368,7 @@ function ArrowMixin:ClearTarget()
         self.ping.animation:Stop()
         self.ping:Hide()
     end
+    UpdateScreenArrow(nil)
 end
 
 function addon.CreateArrow(r, g, b)

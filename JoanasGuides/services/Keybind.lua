@@ -1,11 +1,14 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local hasBindings = false
+local bindingTemplate = "CLICK " .. addonName .. "_ActionButton%d:LeftButton"
 
 local function UpdateBindings()
     for i = 1, 6 do
-        local keybind1, keybind2 = GetBindingKey("CLICK JoanasGuides_ActionButton" .. i .. ":LeftButton")
+        local keybind1, keybind2 = GetBindingKey(bindingTemplate:format(i))
         if (keybind1 or keybind2) then
             hasBindings = true
             return
@@ -22,7 +25,7 @@ end
 
 function KeybindService.Init()
     for i = 1, 6 do
-        _G["BINDING_NAME_CLICK JoanasGuides_ActionButton" .. i .. ":LeftButton"] = "Action Button " .. i
+        _G["BINDING_NAME_" .. bindingTemplate:format(i)] = "Action Button " .. i
     end
     UpdateBindings()
 end

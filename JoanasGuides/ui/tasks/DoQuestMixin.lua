@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 DoQuestMixin = Mixin({
@@ -11,14 +13,14 @@ function DoQuestMixin:IsCompletedFunc(task)
 	local completed = status >= QuestStatus.status.COMPLETED
 	if (status >= QuestStatus.status.ACCEPTED and not completed) then
 		if (task.objective) then
-			local objectives = C_QuestLog.GetQuestObjectives(questID)
+			local objectives = C_QuestLog_GetQuestObjectives(questID)
 			if (objectives and #objectives > 0) then
 				return objectives[task.objective].finished
 			end
 			return false
 		end
 		if (task.objectives) then
-			local objectives = C_QuestLog.GetQuestObjectives(questID)
+			local objectives = C_QuestLog_GetQuestObjectives(questID)
 			if (objectives and #objectives > 0) then
 				for _, idx in ipairs(task.objectives) do
 					if (not objectives[idx].finished) then
@@ -36,8 +38,8 @@ end
 function DoQuestMixin:RenderFunc(task, container)
 	local link = Hyperlinks.GetQuestHyperlink(task, self.type)
 	local questID = task[self.type]
-	local objectives = C_QuestLog.GetQuestObjectives(questID)
-	local questCompleted = C_QuestLog.IsQuestFlaggedCompleted(questID)
+	local objectives = C_QuestLog_GetQuestObjectives(questID)
+	local questCompleted = C_QuestLog_IsQuestFlaggedCompleted(questID)
 	local objectivesMap = { }
 	task.warn = nil
 	if (QuestStatus.GetQuestStatus(questID) == 0) then
@@ -86,7 +88,8 @@ function DoQuestMixin:RenderFunc(task, container)
 				IconService.SetIconTexture(detail.icon, icon)
 				detail:SetAlpha(objective.finished and DIM or 1.0)
 				detail.hasIcon = true
-				detail.text:SetText(FormatQuestObjective(objective, questCompleted))
+				local displayText = (objective.text and objective.text ~= "") and FormatQuestObjective(objective, questCompleted) or "Hidden Objective"
+				detail.text:SetText(displayText)
 				if (hasSpecifiedObjectives and not isSpecifiedObjective) then
 					detail:SetFontTiny()
 				end

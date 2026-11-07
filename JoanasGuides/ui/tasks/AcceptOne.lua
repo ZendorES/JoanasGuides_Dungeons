@@ -1,4 +1,6 @@
---[[ See license.txt for license and copyright information ]]
+--[[ Copyright (C) 2018-2026 TomCat's Gaming, LLC. All Rights Reserved.
+     Unauthorized use, reproduction, or distribution is prohibited.
+     See license.txt included with this distribution for full terms. ]]
 select(2, ...).SetupGlobalFacade()
 
 local TaskType = Mixin({
@@ -19,7 +21,7 @@ end
 function TaskType:RenderFunc(task, container)
 	local link = Hyperlinks.GetQuestHyperlink({ accept = task.acceptone[1] }, "accept")
 	container.text:SetShown(true)
-	container.text:SetText(L["Accept: |C%s%s|r"]:format(Color.QUEST_ACCEPT, link))
+	container.text:SetText(L["Acepta: |C%s%s|r"]:format(Color.QUEST_ACCEPT, link))
 end
 
 RegisterTaskType(TaskType)
