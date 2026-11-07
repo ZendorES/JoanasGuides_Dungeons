@@ -8,7 +8,6 @@ local GetCursorPosition = GetCursorPosition
 local Minimap = Minimap
 local MinimapCluster = MinimapCluster
 local MinimapZoneTextButton = MinimapZoneTextButton
-local UIParent = UIParent
 
 local seqNum = 1
 
@@ -21,18 +20,16 @@ local function MinimapButtonOnload(self)
 	local name = self:GetName()
 	local isDragging = false
 	local tooltipIsShowing = false
-	local Ax, Ay, scale, top, right
+	local Ax, Ay, scale
 	local mapsize = Minimap:GetSize()
 	local r = (mapsize / 2) + 10
 	local h = math.sqrt((r^2)*2)
-	local preferences = {}
+	local preferences = { position = -2.888 }
 	local handlers = {}
 	local shape = GetMinimapShape()
 	local function RefreshMeasurements()
 		Ax, Ay = Minimap:GetCenter()
 		scale = self:GetEffectiveScale()
-		right = UIParent:GetRight()
-		top = UIParent:GetTop()
 	end
 	local function ButtonDown()
 		if (self:IsEnabled()) then
@@ -57,6 +54,7 @@ local function MinimapButtonOnload(self)
 	end
 	local function UpdatePosition()
 		RefreshMeasurements()
+		self:ClearAllPoints()
 		local rad = preferences.position
 		if (GetMinimapShape and GetMinimapShape() == "SQUARE") then
 			local x, y = math.cos(rad), math.sin(rad)
@@ -67,20 +65,6 @@ local function MinimapButtonOnload(self)
 			local Cx = r * math.cos(rad)
 			local Cy = r * math.sin(rad)
 			self:SetPoint("CENTER", Minimap, "CENTER", Cx, Cy)
-		end
-		local buttonRight = self:GetRight()
-		if (buttonRight > right) then
-			local point = { self:GetPoint() }
-			local adj = (buttonRight - right) --* scale
-			point[4] = point[4] - adj
-			self:SetPoint(unpack(point))
-		end
-		local buttonTop = self:GetTop()
-		if (buttonTop > top) then
-			local point = { self:GetPoint() }
-			local adj = (buttonTop - top) --* scale
-			point[5] = point[5] - adj
-			self:SetPoint(unpack(point))
 		end
 	end
 	local function UpdatePositionByCursor()
@@ -200,11 +184,9 @@ function CreateMinimapButton(buttonInfo)
 	end
 	if (buttonInfo.name) then
 		local scope = SavedVariables
-		if (scope[name]) then
-			frame:SetPreferences(scope[name])
-		else
-			scope[name] = frame:GetPreferences()
-		end
+			local preferences = scope[name] or frame:GetPreferences()
+			scope[name] = preferences
+			frame:SetPreferences(preferences)
 	end
 	if (buttonInfo.handler_onclick) then
 		frame:SetHandler("OnClick",
