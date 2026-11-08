@@ -31,7 +31,32 @@ end
 
 function component.Update()
 	if (component:IsDirty()) then
-		component.frame:SetShown(component.frame:IsEnabled() and not State.IsGuideShown())
+		local frame = component.frame
+		local shouldShow = frame:IsEnabled() and not State.IsGuideShown()
+		local mbbButtons = _G["MBB_Buttons"]
+		local isCollectedByMBB = false
+		if (type(mbbButtons) == "table") then
+			for _, buttonName in ipairs(mbbButtons) do
+				if (buttonName == frame:GetName()) then
+					isCollectedByMBB = true
+					break
+				end
+			end
+		end
+		if (isCollectedByMBB) then
+			frame.isvisible = shouldShow
+		end
+		if (shouldShow) then
+			frame:Show()
+		else
+			frame:Hide()
+			if (isCollectedByMBB and frame.ohide) then
+				frame.ohide(frame)
+			end
+		end
+		if (isCollectedByMBB and _G["MBB_SetPositions"]) then
+			_G["MBB_SetPositions"]()
+		end
 		component:MarkClean()
 	end
 end
