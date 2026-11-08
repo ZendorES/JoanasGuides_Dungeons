@@ -10,6 +10,7 @@ local TaskType = Mixin({
 }, TaskTypeMixin)
 
 function TaskType:IsCompletedFunc(task)
+	if (ConditionContext["SEEKING"]) then return true end
 	return TaxiService.HasTaxi(task.learntaxi)
 end
 
