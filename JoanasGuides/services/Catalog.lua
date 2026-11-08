@@ -32,7 +32,7 @@ local function applySupersedes()
     -- Find productIDs superseded by condition-met entries
     local supersededProducts = { }
     for _, entry in ipairs(guideInfos) do
-        if (entry.supersedes and CheckCondition(entry)) then
+        if (entry.supersedes and not entry.stub and CheckCondition(entry)) then
             for _, supID in ipairs(entry.supersedes) do
                 supersededProducts[supID] = true
             end
@@ -209,22 +209,6 @@ local function ensureLoaded()
         source = "Bundled"
     end
 
-    if (not guideInfos) then
-        guideInfos = { }
-        guideInfoByID = { }
-        slotLookup = { }
-    end
-    for _, entry in ipairs(DungeonGuideInfos or { }) do
-        if (not guideInfoByID[entry.guideID]) then
-            table.insert(guideInfos, entry)
-            guideInfoByID[entry.guideID] = entry
-            slotLookup[entry.guideID] = {
-                prefix = "Dungeons",
-                templateName = entry.templateName,
-            }
-        end
-    end
-
     -- Verify signature in the background
     if (signedContent and signature) then
         startBackgroundVerify(signedContent, signature, source)
@@ -252,14 +236,7 @@ function CatalogService.GetGuideTemplate(guideID)
     ensureLoaded()
     local slot = slotLookup[guideID]
     if (not slot) then return nil end
-    if (slot.templateName) then return slot.templateName end
     return ("%s-%s%s"):format(addonName, slot.prefix, slot.slot)
-end
-
-function CatalogService.IsExpired(guideID)
-    local info = guideInfoByID and guideInfoByID[guideID]
-    if (not info or not info.expires) then return false end
-    return GetServerTime() > info.expires
 end
 
 function CatalogService.GetDecryptKey(guideID)
@@ -268,6 +245,12 @@ function CatalogService.GetDecryptKey(guideID)
     if (not info or not info.encrypted) then return nil end
     if (info.expires and GetServerTime() > info.expires) then return nil end
     return catalogDecryptKey
+end
+
+function CatalogService.IsExpired(guideID)
+    local info = guideInfoByID and guideInfoByID[guideID]
+    if (not info or not info.expires) then return false end
+    return GetServerTime() > info.expires
 end
 
 function CatalogService.GetContentHash(guideID)
