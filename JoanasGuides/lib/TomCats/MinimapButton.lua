@@ -194,6 +194,28 @@ function CreateMinimapButton(buttonInfo)
 					buttonInfo.handler_onclick(...)
 				end)
 	end
+	local function RegisterWithMBB()
+		local mbbAddButton = _G["MBB_AddButton"]
+		local mbbIsKnownButton = _G["MBB_IsKnownButton"]
+		local mbbPrepareButton = _G["MBB_PrepareButton"]
+		if (not mbbAddButton or not mbbIsKnownButton or not mbbPrepareButton) then
+			return false
+		end
+		if (not mbbIsKnownButton(name)) then
+			mbbPrepareButton(name)
+			mbbAddButton(name)
+		end
+		return true
+	end
+	if (not RegisterWithMBB()) then
+		local eventFrame = CreateFrame("Frame")
+		eventFrame:RegisterEvent("ADDON_LOADED")
+		eventFrame:SetScript("OnEvent", function(self)
+			if (RegisterWithMBB()) then
+				self:UnregisterEvent("ADDON_LOADED")
+			end
+		end)
+	end
 	-- need to fix this before re-enabling: SexyMap will fade out our icon but will not put it back
 	-- setupButtonForSexyMap(frame)
 	return frame
