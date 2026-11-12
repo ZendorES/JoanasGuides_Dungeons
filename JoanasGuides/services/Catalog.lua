@@ -10,6 +10,7 @@ local guideInfoByID
 local slotLookup
 local minAddonVersionValue
 local guideVersionValue
+local catalogSourceLabel
 local minGuideVersion = C_AddOns.GetAddOnMetadata(addonName, "X-Min-Guide-Version")
 local catalogDecryptKey
 local previousBattleTag
@@ -32,7 +33,7 @@ local function applySupersedes()
     -- Find productIDs superseded by condition-met entries
     local supersededProducts = { }
     for _, entry in ipairs(guideInfos) do
-        if (entry.supersedes and CheckCondition(entry)) then
+        if (entry.supersedes and not entry.stub and CheckCondition(entry)) then
             for _, supID in ipairs(entry.supersedes) do
                 supersededProducts[supID] = true
             end
@@ -208,6 +209,7 @@ local function ensureLoaded()
         signature = gSig
         source = "Bundled"
     end
+    catalogSourceLabel = source == "External" and "Ext" or "Bundled"
 
     if (not guideInfos) then
         guideInfos = { }
@@ -239,6 +241,7 @@ function CatalogService.Reload()
     slotLookup = nil
     minAddonVersionValue = nil
     guideVersionValue = nil
+    catalogSourceLabel = nil
     catalogDecryptKey = nil
     ensureLoaded()
 end
@@ -289,6 +292,12 @@ end
 function CatalogService.IsInstalled(guideID)
     ensureLoaded()
     return slotLookup[guideID] ~= nil
+end
+
+function CatalogService.GetContentVersion()
+    ensureLoaded()
+    if (not guideVersionValue) then return nil end
+    return guideVersionValue .. "-" .. (catalogSourceLabel or "")
 end
 
 function CatalogService.CheckCompatibility()
