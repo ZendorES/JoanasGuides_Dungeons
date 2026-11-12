@@ -10,6 +10,7 @@ local guideInfoByID
 local slotLookup
 local minAddonVersionValue
 local guideVersionValue
+local catalogSourceLabel
 local minGuideVersion = C_AddOns.GetAddOnMetadata(addonName, "X-Min-Guide-Version")
 local catalogDecryptKey
 local previousBattleTag
@@ -32,7 +33,7 @@ local function applySupersedes()
     -- Find productIDs superseded by condition-met entries
     local supersededProducts = { }
     for _, entry in ipairs(guideInfos) do
-        if (entry.supersedes and CheckCondition(entry)) then
+        if (entry.supersedes and not entry.stub and CheckCondition(entry)) then
             for _, supID in ipairs(entry.supersedes) do
                 supersededProducts[supID] = true
             end
@@ -208,22 +209,7 @@ local function ensureLoaded()
         signature = gSig
         source = "Bundled"
     end
-
-    if (not guideInfos) then
-        guideInfos = { }
-        guideInfoByID = { }
-        slotLookup = { }
-    end
-    for _, entry in ipairs(DungeonGuideInfos or { }) do
-        if (not guideInfoByID[entry.guideID]) then
-            table.insert(guideInfos, entry)
-            guideInfoByID[entry.guideID] = entry
-            slotLookup[entry.guideID] = {
-                prefix = "Dungeons",
-                templateName = entry.templateName,
-            }
-        end
-    end
+    catalogSourceLabel = source == "External" and "Ext" or "Bundled"
 
     -- Verify signature in the background
     if (signedContent and signature) then
@@ -239,6 +225,7 @@ function CatalogService.Reload()
     slotLookup = nil
     minAddonVersionValue = nil
     guideVersionValue = nil
+    catalogSourceLabel = nil
     catalogDecryptKey = nil
     ensureLoaded()
 end
@@ -252,7 +239,6 @@ function CatalogService.GetGuideTemplate(guideID)
     ensureLoaded()
     local slot = slotLookup[guideID]
     if (not slot) then return nil end
-    if (slot.templateName) then return slot.templateName end
     return ("%s-%s%s"):format(addonName, slot.prefix, slot.slot)
 end
 
@@ -289,6 +275,12 @@ end
 function CatalogService.IsInstalled(guideID)
     ensureLoaded()
     return slotLookup[guideID] ~= nil
+end
+
+function CatalogService.GetContentVersion()
+    ensureLoaded()
+    if (not guideVersionValue) then return nil end
+    return guideVersionValue .. "-" .. (catalogSourceLabel or "")
 end
 
 function CatalogService.CheckCompatibility()

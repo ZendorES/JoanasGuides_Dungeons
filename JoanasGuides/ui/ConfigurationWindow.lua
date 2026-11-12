@@ -50,10 +50,20 @@ function component:Init()
     if (Brand.configurationWindowSetupTitle) then
         title, menuOffset = Brand.configurationWindowSetupTitle(frame)
     else
-        title = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        title:SetPoint("TOP", 0, -12)
-        title:SetText(string.format("%s %s", addonTitle, GetDisplayVersion()))
-        menuOffset = 64
+        local brandTitle = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        brandTitle:SetPoint("TOP", 0, -12)
+        brandTitle:SetText(addonTitle)
+        title = frame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+        title:SetPoint("TOP", brandTitle, "BOTTOM", 0, -4)
+        title:SetText(string.format("Addon Version %s", GetDisplayVersion()))
+        local contentVersion = CatalogService.GetContentVersion()
+        if (contentVersion) then
+            local cvLabel = frame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+            cvLabel:SetPoint("TOP", title, "BOTTOM", 0, -2)
+            cvLabel:SetText(string.format("Content Version %s", contentVersion))
+            title = cvLabel
+        end
+        menuOffset = 80
     end
     local title2 = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     title2:SetPoint("TOP", title, "BOTTOM", 0, -6)

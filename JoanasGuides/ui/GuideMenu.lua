@@ -7,10 +7,27 @@ local component = UI.CreateComponent("GuideMenu")
 
 local guideContainer, guideHeader, guideMenu
 
+local function getGroupPrefix(group)
+	if (not group) then return nil end
+	return group:match("^(.-)%s*%(") or group
+end
+
+local function getSectionHeading(prefix, hasForever)
+	if (prefix == "Classic Era" and hasForever) then
+		return "Classic Era Guides (Fallback)"
+	elseif (prefix == "Classic Era") then
+		return "Classic Era Guides"
+	else
+		return prefix .. " Guides"
+	end
+end
+
 local function createGuideMenu()
 	local menuData = { }
 	local recommendedMenuData = { }
 	local submenus = { }
+	local currentPrefix = nil
+	local hasForever = false
 	for _, guideInfo in ipairs(CatalogService.GetGuideInfos()) do
 		local moduleInfo = GuideModules.GetModule(guideInfo.moduleID)
 		if (moduleInfo) then
@@ -22,6 +39,23 @@ local function createGuideMenu()
 				if (guideInfo.group) then
 					local submenu = submenus[guideInfo.group]
 					if (not submenu) then
+						local prefix = getGroupPrefix(guideInfo.group)
+						if (prefix ~= currentPrefix) then
+							if (prefix == "Forever") then
+								hasForever = true
+							end
+							table.insert(menuData, {
+								text = "",
+								isTitle = true,
+								notCheckable = true
+							})
+							table.insert(menuData, {
+								text = getSectionHeading(prefix, hasForever),
+								isTitle = true,
+								notCheckable = true
+							})
+							currentPrefix = prefix
+						end
 						submenu = { }
 						table.insert(
 								submenu,
@@ -142,22 +176,6 @@ local function createGuideMenu()
 		end
 		table.insert(
 				menuData,
-				#recommendedMenuData + 1,
-				{
-					text = "",
-					isTitle = true,
-					notCheckable = true
-				})
-		table.insert(
-				menuData,
-				#recommendedMenuData + 2,
-				{
-					text = L["All Guides"],
-					isTitle = true,
-					notCheckable = true
-				})
-		table.insert(
-				menuData,
 				1,
 				{
 					text = #recommendedMenuData == 1 and L["Recommended Guide"] or L["Recommended Guides"],
@@ -165,15 +183,6 @@ local function createGuideMenu()
 					notCheckable = true
 				}
 		)
-	else
-		table.insert(
-				menuData,
-				1,
-				{
-					text = L["All Guides"],
-					isTitle = true,
-					notCheckable = true
-				})
 	end
 	table.insert(
 			menuData,
