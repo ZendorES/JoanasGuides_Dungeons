@@ -1,6 +1,7 @@
 ## X-Copyright: Copyright (C) 2006-2026 TomCat's Gaming, LLC. All rights reserved. See license.txt for full terms.
 ## X-Website: https://www.joanasworld.com
 ## Interface: 11509, 16001, 20506, 50504, 120100
+## IconTexture: Interface\AddOns\JoanasGuides\images\JoanasGuidesPortrait.blp
 ## Title: Joana's Speed Leveling Guide
 ## X-ShortTitle: Joana's Guides
 ## Version: 4.00.06
