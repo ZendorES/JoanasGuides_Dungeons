@@ -223,6 +223,7 @@ NPCNames = {
         [7172] = { name = "Tradicionalista de Norgannon" },
         [7228] = { name = "Hierraya" },
         [7269] = { name = "Escarabajo" },
+        [7271] = { name = "Médico brujo Zum'rah" },
         [7272] = { name = "Theka el Mártir" },
         [7273] = { name = "Gahz'rilla" },
         [7291] = { name = "Galgann Flamartillo" },
@@ -453,6 +454,7 @@ NPCNames = {
         [252085] = { name = "Archimaga Celindra", title = "Kirin Tor" },
         [268743] = { name = "Rexxie Aferracobre" },
         [269127] = { name = "Imagen de la archimaga Modera" },
+        [264074] = { name = "Mazu'kon" },
         -- Silverpine Forest (WoW Forever): traducciones confirmadas.
         [1767] = { name = "Machacador Anca Vil" },
         [1768] = { name = "Cazamareas Anca Vil" },
@@ -690,6 +692,7 @@ NPCNames = {
         [7172] = { name = "Lore Keeper of Norgannon" },
         [7228] = { name = "Ironaya" },
         [7269] = { name = "Scarab" },
+        [7271] = { name = "Witch Doctor Zum'rah" },
         [7272] = { name = "Theka the Martyr" },
         [7273] = { name = "Gahz'rilla" },
         [7291] = { name = "Galgann Firehammer" },
@@ -920,6 +923,7 @@ NPCNames = {
         [252085] = { name = "Archmage Celindra", title = "Kirin Tor" },
         [268743] = { name = "Rexxie Copperclutch" },
         [269127] = { name = "Image of Archmage Modera" },
+        [264074] = { name = "Mazu'kon" },
         -- Silverpine Forest (WoW Forever): guide targets.
         [12432] = { name = "Old Vicejaw" },
         [12433] = { name = "Krethis Shadowspinner" },

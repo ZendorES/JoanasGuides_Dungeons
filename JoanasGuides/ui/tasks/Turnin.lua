@@ -49,9 +49,9 @@ function TaskType:RenderFunc(task, container)
 	container.text:SetShown(true)
 	if (task.fromnpc and not task.warn) then
 		local name = Hyperlinks.GetNPCHyperlink(task)
-		container.text:SetText(L["Speak to %s and turn in: |C%s%s|r"]:format(name, color, link))
+		container.text:SetText(L["Habla con %s y entrega: |C%s%s|r"]:format(name, color, link))
 	else
-		container.text:SetText(L["Turn in: |C%s%s|r"]:format(color, link))
+		container.text:SetText(L["Entrega: |C%s%s|r"]:format(color, link))
 	end
 end
 
