@@ -455,6 +455,11 @@ NPCNames = {
         [268743] = { name = "Rexxie Aferracobre" },
         [269127] = { name = "Imagen de la archimaga Modera" },
         [264074] = { name = "Mazu'kon" },
+        [264078] = { name = "Sutara Acechaprados", title = "Intendente" },
+        -- Razorfen Downs (WoW Forever): nombres de objetivos en esES.
+        [7872] = { name = "Cultor Caramuerte" },
+        [7873] = { name = "Guardia de batalla de Rajacieno" },
+        [7874] = { name = "Tejespina Rajacieno" },
         -- Silverpine Forest (WoW Forever): traducciones confirmadas.
         [1767] = { name = "Machacador Anca Vil" },
         [1768] = { name = "Cazamareas Anca Vil" },
@@ -941,6 +946,11 @@ NPCNames = {
         [268743] = { name = "Rexxie Copperclutch" },
         [269127] = { name = "Image of Archmage Modera" },
         [264074] = { name = "Mazu'kon" },
+        [264078] = { name = "Sutara Plainstalker" },
+        -- Razorfen Downs (WoW Forever): guide targets.
+        [7872] = { name = "Death's Head Cultist" },
+        [7873] = { name = "Razorfen Battleguard" },
+        [7874] = { name = "Razorfen Thornweaver" },
         -- Silverpine Forest (WoW Forever): guide targets.
         [12432] = { name = "Old Vicejaw" },
         [12433] = { name = "Krethis Shadowspinner" },

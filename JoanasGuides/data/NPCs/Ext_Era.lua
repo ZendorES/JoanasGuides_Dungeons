@@ -254,6 +254,9 @@ NPCs_Ext_Era = {
 	[7850] = { 28, 28, nil },
 	[7853] = { 30, 30, nil },
 	[7865] = { 55, 55, nil },
+	[7872] = { 33, 34, 1 },
+	[7873] = { 33, 34, 1 },
+	[7874] = { 33, 34, 1 },
 	[7937] = { nil, nil, 3 },
 	[7950] = { 57, 57, nil },
 	[7977] = { 48, 48, 1 },
@@ -2322,6 +2325,8 @@ NPCs_Ext_Era = {
 	-- Zul'Farrak (WoW Forever).
 	[7271] = { 46, 46, 1 },
 	[264074] = { 35, 35, nil },
+	-- Razorfen Downs (WoW Forever).
+	[264078] = { 30, 30, nil },
 	-- Stratholme (WoW Forever): niveles y clasificaciones de Wowhead.
 	[10440] = { 62, 62, 1 },
 	[10808] = { 58, 58, 4 },

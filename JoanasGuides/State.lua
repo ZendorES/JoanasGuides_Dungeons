@@ -226,6 +226,10 @@ function State.SetDebugEnabled(enabled)
 	SavedVariables.debug = enabled
 end
 
+function State.SetDungeonQuestingEnabled(enabled)
+	SavedVariablesPerCharacter.dungeonQuesting = enabled
+end
+
 function State.SetGroupingEnabled(enabled)
 	SavedVariablesPerCharacter.grouping = enabled
 end
