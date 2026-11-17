@@ -24,9 +24,9 @@ function TaskType:RenderFunc(task, container)
 	task.suppressWarning = task.suppressWarning or TurninOnlyQuests[questID]
 	if ((questStatus == 0 or (questStatus < 2 and hasObjectives)) and not task.suppressWarning) then
 		if (questStatus == 0) then
-			task.warn = string.format("|c%sYou don't have this quest|r", Color.RED_TEXT)
+			task.warn = string.format("|c%sNo tienes esta misión.|r", Color.RED_TEXT)
 		else
-			task.warn = string.format("|c%sQuest is not ready to be turned in|r", Color.RED_TEXT)
+			task.warn = string.format("|c%sLa misión no está lista para ser entregada.|r", Color.RED_TEXT)
 		end
 		for _, taskGroup in ipairs(task.root) do
 			for _, task_ in ipairs(taskGroup) do
@@ -49,9 +49,9 @@ function TaskType:RenderFunc(task, container)
 	container.text:SetShown(true)
 	if (task.fromnpc and not task.warn) then
 		local name = Hyperlinks.GetNPCHyperlink(task)
-		container.text:SetText(L["Speak to %s and turn in: |C%s%s|r"]:format(name, color, link))
+		container.text:SetText(L["Habla con %s y entrega: |C%s%s|r"]:format(name, color, link))
 	else
-		container.text:SetText(L["Turn in: |C%s%s|r"]:format(color, link))
+		container.text:SetText(L["Entrega: |C%s%s|r"]:format(color, link))
 	end
 end
 
