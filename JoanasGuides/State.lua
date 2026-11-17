@@ -139,6 +139,10 @@ function State.IsDebugEnabled()
 	return SavedVariables and SavedVariables.debug
 end
 
+function State.IsDungeonQuestingEnabled()
+	return DefaultValue(SavedVariablesPerCharacter.dungeonQuesting, true)
+end
+
 function State.IsGroupingEnabled()
 	return DefaultValue(SavedVariablesPerCharacter.grouping, true)
 end
@@ -152,11 +156,11 @@ function State.IsHardcoreEnabled()
 end
 
 function State.IsHiddenInInstances()
-	return DefaultValue(SavedVariables.hiddenInInstances, false)
+	return DefaultValue(SavedVariables.hiddenInInstances, true)
 end
 
 function State.IsInvertedModeEnabled()
-	return DefaultValue(SavedVariables.invertedMode, true)
+	return DefaultValue(SavedVariables.invertedMode,false)
 end
 
 function State.IsKeybindDisplayEnabled()
@@ -220,6 +224,10 @@ end
 
 function State.SetDebugEnabled(enabled)
 	SavedVariables.debug = enabled
+end
+
+function State.SetDungeonQuestingEnabled(enabled)
+	SavedVariablesPerCharacter.dungeonQuesting = enabled
 end
 
 function State.SetGroupingEnabled(enabled)

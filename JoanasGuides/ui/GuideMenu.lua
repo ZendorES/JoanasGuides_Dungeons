@@ -17,8 +17,6 @@ local function getSectionHeading(prefix, hasForever)
 		return "Classic Era Guides (Fallback)"
 	elseif (prefix == "Classic Era") then
 		return "Classic Era Guides"
-	elseif (prefix == "Mazmorras") then
-		return "Zendor Guides"
 	else
 		return prefix .. " Guides"
 	end

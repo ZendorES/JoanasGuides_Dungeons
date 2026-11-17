@@ -97,7 +97,10 @@ function TriggerService.RunAll()
     if (#queue == 0) then return false end
     local triggersRan = false
     for _, obj in ipairs(queue) do
-        local context = {
+        local guideIds = Condition_GetGuideIds()
+        local guideIdLookup = {}
+        for _, id in ipairs(guideIds) do guideIdLookup[id] = true end
+        local context = setmetatable({
             locations = obj.root and obj.root.locations or obj.locations,
             SESSION = CustomVariablesService.GetSessionScope(),
             VAR = CustomVariablesService.GetCharacterScope(),
@@ -105,7 +108,7 @@ function TriggerService.RunAll()
             COMPLETEONSTART = ConditionContext["COMPLETEONSTART"],
             INCOMPLETEONSTART = ConditionContext["INCOMPLETEONSTART"],
             Goto = GotoAutomatic,
-        }
+        }, { __index = guideIdLookup })
         if (obj.oncomplete) then
             if (type(obj.oncomplete) == "string") then
                 obj.oncomplete = loadstring(obj.oncomplete)

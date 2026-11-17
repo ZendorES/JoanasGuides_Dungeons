@@ -20,28 +20,25 @@ function component.Init()
 		frame:SetPoint("TOPRIGHT", -15, -330)
 	end
 	frame:SetMovable(true)
-	frame:EnableMouse(true)
-	frame:RegisterForDrag("LeftButton")
-	if (frame.SetPassThroughButtons) then
-		frame:SetPassThroughButtons("RightButton")
-	end
 	frame:SetClampedToScreen(true)
-	frame:SetScript("OnDragStart", function(self)
-		if (InRetailCombatLockdown()) then return end
-		if not self.isLocked then
-			self:StartMoving()
-			isMoving = true
-			UI.CloseGuideMenu()
-		end
+
+	local dragBar = CreateFrame("Frame", nil, frame, "PanelDragBarTemplate")
+	dragBar:SetAllPoints()
+	dragBar:SetScript("OnEnter", nil)
+	dragBar:SetScript("OnLeave", nil)
+	if (dragBar.SetPassThroughButtons) then
+		dragBar:SetPassThroughButtons("RightButton")
+	end
+	dragBar:HookScript("OnDragStart", function()
+		ResetCursor()
+		isMoving = true
+		UI.CloseGuideMenu()
 	end)
-	frame:SetScript("OnUpdate", function(self)
-		if (isMoving and not IsMouseButtonDown("LeftButton")) then
-			self:StopMovingOrSizing()
-			isMoving = nil
-			SavedVariables.WindowLocation = { self:GetPoint() }
-		end
+	dragBar:HookScript("OnDragStop", function()
+		isMoving = nil
+		SavedVariables.WindowLocation = { frame:GetPoint() }
 	end)
-	frame:EnableMouse(not State.IsWindowLocked())
+	component.dragBar = dragBar
 	component.frame = frame
 end
 
@@ -72,7 +69,7 @@ end
 
 function UI.SetGuideContainerLocked(lockedFlag)
 	State.SetWindowLocked(lockedFlag)
-	component.frame:EnableMouse(not lockedFlag)
+	component.dragBar:EnableMouse(not lockedFlag)
 end
 
 UI.Add(component)

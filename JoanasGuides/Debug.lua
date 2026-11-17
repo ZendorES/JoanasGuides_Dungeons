@@ -20,11 +20,10 @@ end
 function Debug.GetDebugInfo()
 	local wowVersion, wowBuild = GetBuildInfo()
 	local guideID = "None"
-	local guideVersion = "None"
+	local guideVersion = CatalogService.GetContentVersion() or "None"
 	if (GuideNavigationService.IsGuideSet()) then
 		local currentGuide = GuideNavigationService.GetGuide()
 		guideID = currentGuide.id
-		guideVersion = currentGuide.moduleInfo.version
 	end
 	local stepID = GuideNavigationService.GetStep() and GuideNavigationService.GetStep().id or "None"
 	return DEBUG_MSG:format(wowVersion, wowBuild, GuideModules.GetAddonVersion(), guideID, guideVersion, stepID)

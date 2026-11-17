@@ -4,6 +4,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 	<Script file="lib/TomCats/GlobalFacade.lua" />
+	<Script file="lib/TomCats/UTF8.lua" />
 	<Script file="lib/TomCats/Maps.lua" />
 	<Script file="lib/TomCats/Arrows.lua" />
 	<Script file="lib/TomCats/Base64.lua" />

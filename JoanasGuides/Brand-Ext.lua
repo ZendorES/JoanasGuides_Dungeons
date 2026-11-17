@@ -10,23 +10,3 @@ Brand.slashCommand = "joana"
 Brand.hasWebGuides = true
 Brand.installerName = "Joana's Guides Manager"
 
--- Deprecated: Remove this once Era guides are fully migrated to Forever context including guide ID conditions and
--- goto buttons have been resolved
-function Brand.registerGuideAlias(guideID, context)
-	local baseID = guideID:match("^(.+)_FVR$")
-	if (baseID) then
-		context[baseID] = true
-	end
-end
-
--- Deprecated: Remove this once Era guides are fully migrated to Forever context including guide ID conditions and
--- goto buttons have been resolved
-function Brand.resolveGuideAlias(guideID)
-	if (not CatalogService.IsInstalled(guideID)) then
-		local fvrID = guideID .. "_FVR"
-		if (CatalogService.IsInstalled(fvrID)) then
-			return fvrID
-		end
-	end
-	return guideID
-end

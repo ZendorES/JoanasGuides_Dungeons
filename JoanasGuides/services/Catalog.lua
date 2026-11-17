@@ -20,7 +20,7 @@ local needsInstallerRun
 local function initBattleTag()
     if (not previousBattleTagCaptured) then
         previousBattleTagCaptured = true
-        previousBattleTag = SavedVariables.battleTag and SavedVariables.battleTag:lower() or nil
+        previousBattleTag = SavedVariables.battleTag and UTF8.Lower(SavedVariables.battleTag) or nil
         needsInstallerRun = SavedVariables.needsInstallerRun
     end
     local _, liveTag = BNGetInfo()
@@ -102,13 +102,13 @@ end
 
 local function getBattleTag()
     local tag = SavedVariables.battleTag
-    return tag and tag:lower() or nil
+    return tag and UTF8.Lower(tag) or nil
 end
 
 local function deriveDecryptKey(battleTags)
     local sorted = {}
     for _, tag in ipairs(battleTags) do
-        table.insert(sorted, tag:lower())
+        table.insert(sorted, UTF8.Lower(tag))
     end
     table.sort(sorted)
     return table.concat(sorted, "")
@@ -125,7 +125,7 @@ local function tryLoadExternalCatalog()
         local playerTag = getBattleTag()
         if (playerTag) then
             for _, tag in ipairs(catalogData.battleTags) do
-                if (tag:lower() == playerTag) then
+                if (UTF8.Lower(tag) == playerTag) then
                     catalogDecryptKey = deriveDecryptKey(catalogData.battleTags)
                     break
                 end
@@ -211,22 +211,6 @@ local function ensureLoaded()
     end
     catalogSourceLabel = source == "External" and "Ext" or "Bundled"
 
-    if (not guideInfos) then
-        guideInfos = { }
-        guideInfoByID = { }
-        slotLookup = { }
-    end
-    for _, entry in ipairs(DungeonGuideInfos or { }) do
-        if (not guideInfoByID[entry.guideID]) then
-            table.insert(guideInfos, entry)
-            guideInfoByID[entry.guideID] = entry
-            slotLookup[entry.guideID] = {
-                prefix = "Dungeons",
-                templateName = entry.templateName,
-            }
-        end
-    end
-
     -- Verify signature in the background
     if (signedContent and signature) then
         startBackgroundVerify(signedContent, signature, source)
@@ -255,7 +239,6 @@ function CatalogService.GetGuideTemplate(guideID)
     ensureLoaded()
     local slot = slotLookup[guideID]
     if (not slot) then return nil end
-    if (slot.templateName) then return slot.templateName end
     return ("%s-%s%s"):format(addonName, slot.prefix, slot.slot)
 end
 

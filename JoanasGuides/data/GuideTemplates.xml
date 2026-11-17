@@ -415,6 +415,4 @@
 	<SimpleHTML name="JoanasGuides-External0199" file="Interface\Content\JoanasGuides-Content\0199.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-External0200" file="Interface\Content\JoanasGuides-Content\0200.html" virtual="true" />
 
-	<Script file="Dungeons/GuideInfos.lua" />
-	<Include file="Dungeons/GuideTemplates.xml" />
 </Ui>
