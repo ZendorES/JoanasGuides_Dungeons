@@ -269,6 +269,9 @@ local contextFunctions = {
 			return currentObj.taskType:IsCompleted(currentObj)
 		end
 	end,
+	DUNGEONQUESTING = function()
+		return State.IsDungeonQuestingEnabled()
+	end,
 	FLYING = function()
 		return IsPlayerSpell(34090) or IsPlayerSpell(54197)
 	end,
@@ -451,16 +454,27 @@ setmetatable(context, {
 	end
 })
 
+local registeredGuideIds = {}
+
 function Condition_ResetGuides()
+	for _, id in ipairs(registeredGuideIds) do
+		context[id] = nil
+	end
+	registeredGuideIds = {}
 	for _, guideInfo in ipairs(CatalogService.GetGuideInfos()) do
 		local moduleInfo = GuideModules.GetModule(guideInfo.moduleID)
 		if (moduleInfo and moduleInfo.installed and moduleInfo.compatible) then
 			context[guideInfo.guideID] = true
+			table.insert(registeredGuideIds, guideInfo.guideID)
 			if (Brand.registerGuideAlias) then
-				Brand.registerGuideAlias(guideInfo.guideID, context)
+				Brand.registerGuideAlias(guideInfo.guideID, context, registeredGuideIds)
 			end
 		end
 	end
+end
+
+function Condition_GetGuideIds()
+	return registeredGuideIds
 end
 
 function GetCondition(varname)

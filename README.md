@@ -37,7 +37,8 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | La Masacre - Oeste            | ✅ Disponible |
 | La Masacre - Norte            | ✅ Disponible |
 | Scholomance                   |  ⏳ Pendiente |
-| Stratholme Viva/Muerta        |  ⏳ Pendiente |
+| Stratholme Viva               | ✅ Disponible |
+| Stratholme Muerta             |  ⏳ Pendiente |
 
 ### 🔴 Horda
 
@@ -62,7 +63,8 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | La Masacre - Oeste            | ✅ Disponible |
 | La Masacre - Norte            | ✅ Disponible |
 | Scholomance                   | ✅ Disponible |
-| Stratholme Viva/Muerta        |  ⏳ Pendiente |
+| Stratholme Viva               | ✅ Disponible |
+| Stratholme Muerta             |  ⏳ Pendiente |
 
 ---
 

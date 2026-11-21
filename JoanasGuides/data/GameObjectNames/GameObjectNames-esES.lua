@@ -976,4 +976,9 @@ GameObjectNames = {
 	[670427] = "Baúl de la celadora",
 	[656681] = "Escrito de Dalaran",
 	[1594] = "Estantería de Berard",
+	[660624] = "Ojo del Gélido",
+	[177264] = "Símbolo del Honor Perdido",
+	[176112] = "Caja fuerte de Malor",
+	[177287] = "Cuadro a medias",
+	[176245] = "Archivo Escarlata",
 }

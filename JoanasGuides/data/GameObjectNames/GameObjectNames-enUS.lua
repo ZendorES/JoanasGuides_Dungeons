@@ -975,5 +975,10 @@ GameObjectNames = {
 	[177964] = "Fathom Stone",
 	[670427] = "Warden's Footlocker",
 	[656681] = "Dalaran Tome",
-	[1594] = "Berard's Bookshelf"
+	[1594] = "Berard's Bookshelf",
+	[660624] = "The Coldbringer's Eye",
+	[177264] = "Symbol of Lost Honor",
+	[176112] = "Malor's Strongbox",
+	[177287] = "Unfinished Painting",
+	[176245] = "Scarlet Archive",
 }

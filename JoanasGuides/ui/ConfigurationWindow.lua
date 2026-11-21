@@ -106,6 +106,17 @@ function component:Init()
         end
     })
     table.insert(options,{
+        text = L["Dungeon Questing"],
+        tooltip = "When checked, steps involving dungeon quests are included in the guide.\n\n(setting saved per character)",
+        checked = function()
+            return State.IsDungeonQuestingEnabled()
+        end,
+        func = function()
+            State.SetDungeonQuestingEnabled(not State.IsDungeonQuesting())
+            MarkAllDirty()
+        end
+    })
+    table.insert(options,{
         text = L["Auction House / Mailbox Usage"],
         tooltip = "When checked, steps involving use of the auction house and mailbox are included in the guide.\n\nAlthough the official Hardcore servers allow this, disabling the option is useful if you are playing with a more strict unofficial hardcore ruleset.\n\n(setting saved per character)",
         checked = function()
