@@ -88,4 +88,8 @@ TaxiNodes = {
 	[85] = "Northpass Tower, Eastern Plaguelands",
 	[86] = "Eastwall Tower, Eastern Plaguelands",
 	[87] = "Crown Guard Tower, Eastern Plaguelands",
+	[3203] = "Rog'mar, Riverglades",
+    [3274] = "Powderfuse Port, Riverglades",
+    [3275] = "Powderfuse Port, Riverglades",
+    [3276] = "Farholde Keep, Riverglades",
 }

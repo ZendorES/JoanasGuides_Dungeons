@@ -456,6 +456,7 @@ NPCNames = {
         [269127] = { name = "Imagen de la archimaga Modera" },
         [264074] = { name = "Mazu'kon" },
         [264078] = { name = "Sutara Acechaprados", title = "Intendente" },
+        [255993] = { name = "Grakna", title = "Maestra de jinete del viento" },
         -- Razorfen Downs (WoW Forever): nombres de objetivos en esES.
         [7872] = { name = "Cultor Caramuerte" },
         [7873] = { name = "Guardia de batalla de Rajacieno" },
@@ -947,6 +948,7 @@ NPCNames = {
         [269127] = { name = "Image of Archmage Modera" },
         [264074] = { name = "Mazu'kon" },
         [264078] = { name = "Sutara Plainstalker" },
+        [255993] = { name = "Grakna", title = "Wind Rider Master" },
         -- Razorfen Downs (WoW Forever): guide targets.
         [7872] = { name = "Death's Head Cultist" },
         [7873] = { name = "Razorfen Battleguard" },

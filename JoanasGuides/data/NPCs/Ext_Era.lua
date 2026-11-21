@@ -2241,6 +2241,7 @@ NPCs_Ext_Era = {
 	[10678] = { 57, 59, nil },
 	[10432] = { 60, 60, 1 },
 	[11261] = { 60, 60, 1 },
+	[255993] = { 55, 55, 1 },
 	-- Ruinas de Lordaeron (WoW Forever): niveles y clasificaciones de Wowhead.
 	[1495] = { 22, 22, nil },
 	[1529] = { 9, 10, nil },

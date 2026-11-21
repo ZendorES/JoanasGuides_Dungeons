@@ -6469,6 +6469,7 @@ NPCs = {
 	[10678] = { 0, 0, 2, 2, 4 },
 	[10432] = { 0, 0, 2, 2, 1 },
 	[11261] = { 0, 0, 2, 2, 0 },
+	[255993] = { 2, 1, 2, 3, 0 },
 	-- Ruinas de Lordaeron (WoW Forever): datos de forever.warcraftdb.com y Wowhead.
 	[4585] = { 5, 0, 2, 3, 0 },
 	[11835] = { 5, 0, 2, 3, 0 },
