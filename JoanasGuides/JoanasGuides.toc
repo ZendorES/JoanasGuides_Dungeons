@@ -4,9 +4,9 @@
 ## IconTexture: Interface\AddOns\JoanasGuides\images\JoanasGuidesPortrait.blp
 ## Title: Joana's Speed Leveling Guide
 ## X-ShortTitle: Joana's Guides
-## Version: 4.00.12
+## Version: 4.00.14
 ## X-Min-Guide-Version: 4.00.00
-## Notes: Version: 4.00.12
+## Notes: Version: 4.00.14
 ## DefaultState: enabled
 ## SavedVariables: JoanasGuides_Account
 ## SavedVariablesPerCharacter: JoanasGuides_Character

@@ -88,7 +88,6 @@ TaxiNodes = {
 	[85] = "Torre del Paso Norte, Tierras de la Peste del Este",
 	[86] = "Torre de la Muralla del Este, Tierras de la Peste del Este",
 	[87] = "Torre de la Corona, Tierras de la Peste del Este",
-	[88] = "Puerto Polvofusil, Tuercespina",
 	[3203] = "Rog'mar, Clarofluvial",
     [3274] = "Puerto Polvofusil, Clarofluvial",
     [3275] = "Puerto Polvofusil, Clarofluvial",

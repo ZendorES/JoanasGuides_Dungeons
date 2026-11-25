@@ -8,7 +8,7 @@ local bankBags = { -1 }
 for bankBag = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + 1 + NUM_BANKBAGSLOTS do
 	table.insert(bankBags, bankBag)
 end
-local bags = { 0, 1, 2, 3, 4 }
+local bags = IsForever() and { 0, 1, 2, 3, 4, 5 } or { 0, 1, 2, 3, 4 }
 local checkEmptyContainerSpace, moveItem
 
 local function OnEvent(_, event)

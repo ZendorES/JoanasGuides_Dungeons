@@ -112,7 +112,7 @@ function component:Init()
             return State.IsDungeonQuestingEnabled()
         end,
         func = function()
-            State.SetDungeonQuestingEnabled(not State.IsDungeonQuesting())
+            State.SetDungeonQuestingEnabled(not State.IsDungeonQuestingEnabled())
             MarkAllDirty()
         end
     })
