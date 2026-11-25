@@ -26,7 +26,7 @@ popupDialog = {
     showAlert = true,
     preferredIndex = 3,
     run = function(itemID, itemName)
-        popupDialog.text = "Are you sure you want to destroy " .. (itemName or "the item") .. "?"
+        popupDialog.text = "¿Estás seguro de que quieres eliminar " .. (itemName or "the item") .. "?"
         popupDialog.itemID = itemID
         StaticPopup_Show(addonName .. "_CONFIRM_DESTROY_ITEM")
     end

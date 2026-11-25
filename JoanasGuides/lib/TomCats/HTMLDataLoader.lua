@@ -48,7 +48,8 @@ function LoadHTMLData(templateName, sandbox, decryptKey, expectedHash)
             return nil, "hash_mismatch"
         end
     end
-    local f = loadstring("return " .. decoded)
+    local script = decoded:match("^%s*return%s") and decoded or "return " .. decoded
+    local f = loadstring(script)
     if (not f) then return nil end
     setfenv(f, sandbox or emptySandbox)
     local results = { pcall(f) }

@@ -17,6 +17,8 @@ local function getSectionHeading(prefix, hasForever)
 		return "Classic Era Guides (Fallback)"
 	elseif (prefix == "Classic Era") then
 		return "Classic Era Guides"
+	elseif (prefix == "Mazmorras") then
+		return "Zendor Guides v0.9.40.6"
 	else
 		return prefix .. " Guides"
 	end
@@ -154,7 +156,7 @@ local function createGuideMenu()
 				table.insert(
 						_menu,
 						guideMenuItem)
-				if (not GuideNavigationService.IsGuideSet() and installed and guideInfo.recommended and CheckCondition(guideInfo, guideInfo.recommended)) then
+				if (installed and guideInfo.recommended and CheckCondition(guideInfo, guideInfo.recommended)) then
 					table.insert(recommendedMenuData, guideMenuItem)
 				end
 			end
@@ -279,8 +281,7 @@ local function createGuideMenu()
 					end
 				})
 	end
-	if (returnToLevelingGuide or (returnToRuneGuide and not returnToRuneGuideIsComplete)) then
-		table.insert(
+	table.insert(
 			menuData,
 			1,
 			{
@@ -288,7 +289,6 @@ local function createGuideMenu()
 				isTitle = true,
 				notCheckable = true
 			})
-	end
 	table.insert(
 			menuData,
 			1,

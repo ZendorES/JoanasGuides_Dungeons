@@ -3,6 +3,7 @@
 ..\FrameXML\UI.xsd">
 
     <Script file="data/AlertSounds.lua" />
+    <Script file="data/NPCNames.lua" />
     <Script file="data/GameObjectModels/Base.lua" />
     <Script file="data/GameObjectModels/Era.lua" />
     <Script file="data/GameObjectModels/TBC.lua" />
