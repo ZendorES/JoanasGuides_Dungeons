@@ -93,6 +93,10 @@ function IsRetailAPI()
 	return isRetailAPI
 end
 
+function IsForever()
+	return wowversion >= 16000 and wowversion < 20000
+end
+
 function InRetailCombatLockdown()
 	return isRetailAPI and InCombatLockdown()
 end

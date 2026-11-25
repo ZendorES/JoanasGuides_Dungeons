@@ -19,9 +19,9 @@ function TaskType:RenderFunc(task, container)
 	container.text:SetShown(true)
 	if (task.fromnpc) then
 		local name = Hyperlinks.GetNPCHyperlink(task)
-		container.text:SetText(L["Habla con %s y acepta: |C%s%s|r"]:format(name, Color.QUEST_ACCEPT, link))
+		container.text:SetText(L["Speak to %s and accept: |C%s%s|r"]:format(name, Color.QUEST_ACCEPT, link))
 	else
-		container.text:SetText(L["Acepta: |C%s%s|r"]:format(Color.QUEST_ACCEPT, link))
+		container.text:SetText(L["Accept: |C%s%s|r"]:format(Color.QUEST_ACCEPT, link))
 	end
 end
 
