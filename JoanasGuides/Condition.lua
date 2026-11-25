@@ -507,6 +507,7 @@ function Condition_OnAddonLoad()
 			end
 		else
 			context["FOREVER"] = true
+			context["PHASE"] = 5
 		end
 	elseif (gameVersion >= 30000 and gameVersion < 40000) then
 		context["WOTLK"] = true
