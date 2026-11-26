@@ -459,6 +459,12 @@ NPCNames = {
         [264074] = { name = "Mazu'kon" },
         [264078] = { name = "Sutara Acechaprados", title = "Intendente" },
         [255993] = { name = "Grakna", title = "Maestra de jinete del viento" },
+        -- La Ciudad Sumergida (WoW Forever): nombres esES de Wowhead; no observados por el collector.
+        [258905] = { name = "Zul'Alai" },
+        [258924] = { name = "Var'Taka" },
+        [260042] = { name = "Capitán Alzapavor" },
+        [260353] = { name = "Coronel Videntesal" },
+        [262397] = { name = "Hostigador Escamasalada" },
         -- Razorfen Downs (WoW Forever): nombres de objetivos en esES.
         [7872] = { name = "Cultor Caramuerte" },
         [7873] = { name = "Guardia de batalla de Rajacieno" },
@@ -953,6 +959,12 @@ NPCNames = {
         [264074] = { name = "Mazu'kon" },
         [264078] = { name = "Sutara Plainstalker" },
         [255993] = { name = "Grakna", title = "Wind Rider Master" },
+        -- The Drowned City (WoW Forever): guide targets.
+        [258905] = { name = "Zul'Alai" },
+        [258924] = { name = "Var'Taka" },
+        [260042] = { name = "Captain Dreadrise" },
+        [260353] = { name = "Saltseer Coroner" },
+        [262397] = { name = "Brinescale Skirmisher" },
         -- Razorfen Downs (WoW Forever): guide targets.
         [7872] = { name = "Death's Head Cultist" },
         [7873] = { name = "Razorfen Battleguard" },
