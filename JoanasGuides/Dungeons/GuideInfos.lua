@@ -33,6 +33,7 @@ addGuide("DNG_AD3042SM", "30-42 Monasterio Escarlata", "JoanasGuides-AD3042SM", 
 addGuide("DNG_HD3042SM", "30-42 Monasterio Escarlata", "JoanasGuides-HD3042SM", "HORDE")
 addGuide("DNG_AD3441RFD", "34-41 Zahúrda Rojocieno", "JoanasGuides-AD3441RFD", "ALLIANCE")
 addGuide("DNG_HD3441RFD", "34-41 Zahúrda Rojocieno", "JoanasGuides-HD3441RFD", "HORDE")
+addGuide("DNG_HD3542DCS", "35-42 La Ciudad Sumergida", "JoanasGuides-HD3542DCS", "HORDE")
 addGuide("DNG_AD3647ULD", "36-47 Uldaman", "JoanasGuides-AD3647ULD", "ALLIANCE")
 addGuide("DNG_HD3647ULD", "36-47 Uldaman", "JoanasGuides-HD3647ULD", "HORDE")
 addGuide("DNG_AD4348ZF", "43-48 Zul'Farrak", "JoanasGuides-AD4348ZF", "ALLIANCE")

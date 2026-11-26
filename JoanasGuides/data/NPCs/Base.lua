@@ -6514,6 +6514,12 @@ NPCs = {
 	[1958] = { 0, 0, 2, 2, 0 },
 	-- Zul'Farrak (WoW Forever).
 	[264074] = { 8, 0, 2, 3, 0 },
+	-- La Ciudad Sumergida (WoW Forever).
+	[258905] = { 0, nil, 2, 2, 1 },
+	[258924] = { 0, nil, 2, 2, 0 },
+	[260042] = { 0, nil, 2, 2, 0 },
+	[260353] = { 0, nil, 2, 2, 0 },
+	[262397] = { 0, nil, 2, 2, 0 },
 	-- Razorfen Downs (WoW Forever).
 	[264078] = { 0, 0, 2, 3, 1 },
 	-- Stratholme (WoW Forever): NPCs de la guía de la parte viva y el desvío del medallón.

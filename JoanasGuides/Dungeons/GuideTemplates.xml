@@ -18,6 +18,7 @@
 	<SimpleHTML name="JoanasGuides-HD3042SM" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-30-42-scarlet-monastery.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-AD3441RFD" file="Interface\AddOns\JoanasGuides\Dungeons\a-dungeon-34-41-razorfen-downs.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-HD3441RFD" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-34-41-razorfen-downs.html" virtual="true" />
+	<SimpleHTML name="JoanasGuides-HD3542DCS" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-35-42-drowned-city.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-AD3647ULD" file="Interface\AddOns\JoanasGuides\Dungeons\a-dungeon-36-47-uldaman.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-HD3647ULD" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-36-47-uldaman.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-AD4348ZF" file="Interface\AddOns\JoanasGuides\Dungeons\a-dungeon-43-48-zulfarrak.html" virtual="true" />

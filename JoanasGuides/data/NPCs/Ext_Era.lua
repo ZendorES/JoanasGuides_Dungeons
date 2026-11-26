@@ -2328,6 +2328,14 @@ NPCs_Ext_Era = {
 	-- Zul'Farrak (WoW Forever).
 	[7271] = { 46, 46, 1 },
 	[264074] = { 35, 35, nil },
+	-- La Ciudad Sumergida (WoW Forever); niveles no confirmados.
+	[258905] = { nil, nil, 1 },
+	[258924] = { nil, nil, 1 },
+	[260042] = { nil, nil, 1 },
+	-- Saltseer Coroner: nivel no confirmado, elite (Wowhead Forever).
+	[260353] = { nil, nil, 1 },
+	-- Brinescale Skirmisher: nivel 36-38, normal (Wowhead Forever).
+	[262397] = { 36, 38, nil },
 	-- Razorfen Downs (WoW Forever).
 	[264078] = { 30, 30, nil },
 	-- Stratholme (WoW Forever): niveles y clasificaciones de Wowhead.
