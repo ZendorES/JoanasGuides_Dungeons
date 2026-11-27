@@ -78,10 +78,10 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | Ruinas de Lordaeron   | ⏳ Pendiente |
 | Excavación: Los Humedales | ⏳ Pendiente |
 | Ciudad de Dalaran     | ⏳ Pendiente |
-| Bastión Krol’dok      | ⏳ Pendiente |
 | Ciudad Sumergida      | ⏳ Pendiente |
-| Bastión Faucenegra    | ⏳ Pendiente |
+| Bastión Krol’dok      | ⏳ Pendiente |
 | Prisión de Alcaz      | ⏳ Pendiente |
+| Bastión Faucenegra    | ⏳ Pendiente |
 | Bancal del Creador    | ⏳ Pendiente |
 
 ### 🔴 Horda
@@ -92,8 +92,8 @@ Listado de las mazmorras disponibles para cada versión del juego y facción, in
 | Ruinas de Lordaeron   | ✅ Disponible |
 | Excavación: Los Humedales | ✅ Disponible |
 | Ciudad de Dalaran     | ✅ Disponible |
+| Ciudad Sumergida      | ✅ Disponible |
 | Bastión Krol’dok      | ⏳ Pendiente |
-| Ciudad Sumergida      | ⏳ Pendiente |
-| Bastión Faucenegra    | ⏳ Pendiente |
 | Prisión de Alcaz      | ⏳ Pendiente |
+| Bastión Faucenegra    | ⏳ Pendiente |
 | Bancal del Creador    | ⏳ Pendiente |
