@@ -51,5 +51,8 @@ addGuide("DNG_AD5760DMN", "57-60 La Masacre - Norte", "JoanasGuides-AD5760DMN", 
 addGuide("DNG_HD5760DMN", "57-60 La Masacre - Norte", "JoanasGuides-HD5760DMN", "HORDE")
 addGuide("DNG_HD5560LBRS", "55-60 Cumbre de Roca Negra - Inferior", "JoanasGuides-HD5560LBRS", "HORDE")
 addGuide("DNG_HD5760UBRS", "57-60 Cumbre de Roca Negra - Superior", "JoanasGuides-HD5760UBRS", "HORDE")
+addGuide("DNG_AD5760SCH", "57-60 Scholomance", "JoanasGuides-AD5760SCH", "ALLIANCE")
 addGuide("DNG_HD5760SCH", "57-60 Scholomance", "JoanasGuides-HD5760SCH", "HORDE")
 addGuide("DNG_BD5860STL", "58-60 Stratholme - Parte viva", "JoanasGuides-BD5860STL")
+addGuide("DNG_AD5860STU", "58-60 Stratholme - Parte muerta", "JoanasGuides-AD5860STU", "ALLIANCE")
+addGuide("DNG_HD5860STU", "58-60 Stratholme - Parte muerta", "JoanasGuides-HD5860STU", "HORDE")

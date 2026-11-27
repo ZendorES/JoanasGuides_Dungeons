@@ -981,4 +981,7 @@ GameObjectNames = {
 	[176112] = "Caja fuerte de Malor",
 	[177287] = "Cuadro a medias",
 	[176245] = "Archivo Escarlata",
+	[176249] = "Datos de la Plaga",
+	[176631] = "Regalo de Menethil",
+	[176317] = "Bastión Argenta",
 }

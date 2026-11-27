@@ -36,6 +36,9 @@
 	<SimpleHTML name="JoanasGuides-HD5760DMN" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-57-60-diremaul-north.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-HD5560LBRS" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-55-60-blackrock-spire-lower.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-HD5760UBRS" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-55-60-blackrock-spire-upper.html" virtual="true" />
+	<SimpleHTML name="JoanasGuides-AD5760SCH" file="Interface\AddOns\JoanasGuides\Dungeons\a-dungeon-57-60-scholomance.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-HD5760SCH" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-57-60-scholomance.html" virtual="true" />
 	<SimpleHTML name="JoanasGuides-BD5860STL" file="Interface\AddOns\JoanasGuides\Dungeons\both-dungeon-58-60-stratholme-living.html" virtual="true" />
+	<SimpleHTML name="JoanasGuides-AD5860STU" file="Interface\AddOns\JoanasGuides\Dungeons\a-dungeon-58-60-stratholme-undead.html" virtual="true" />
+	<SimpleHTML name="JoanasGuides-HD5860STU" file="Interface\AddOns\JoanasGuides\Dungeons\h-dungeon-58-60-stratholme-undead.html" virtual="true" />
 </Ui>
