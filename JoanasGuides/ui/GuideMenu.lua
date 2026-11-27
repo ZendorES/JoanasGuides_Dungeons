@@ -18,7 +18,7 @@ local function getSectionHeading(prefix, hasForever)
 	elseif (prefix == "Classic Era") then
 		return "Classic Era Guides"
 	elseif (prefix == "Mazmorras") then
-		return "Zendor Guides v0.9.41.0"
+		return "Zendor Guides v0.9.44.0"
 	else
 		return prefix .. " Guides"
 	end

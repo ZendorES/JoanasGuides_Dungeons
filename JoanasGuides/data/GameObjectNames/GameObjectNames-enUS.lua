@@ -981,4 +981,7 @@ GameObjectNames = {
 	[176112] = "Malor's Strongbox",
 	[177287] = "Unfinished Painting",
 	[176245] = "Scarlet Archive",
+	[176249] = "Scourge Data",
+	[176631] = "Menethil's Gift",
+	[176317] = "The Argent Hold",
 }
